@@ -1,0 +1,651 @@
+@media not print {
+  .dd-print-only {
+    display: none;
+  }
+}
+body {
+  color: #999;
+}
+
+.dd-backdrop {
+  background-color: #EFEFEF;
+}
+.dd-backdrop-dev {
+  background-color: #CCECFF;
+}
+.dd-paper-wallet-keys {
+  font-size: 8pt;
+}
+
+html {
+    font-size: 15px;
+}
+
+body {
+    padding-top: 3.3rem;
+    color: #62717f;
+    font-size: inherit;
+    line-height: 1.5;
+}
+
+h2 {
+    color: #1E8CEB;
+    margin: 1em;
+    text-align:  center;
+    font-size: 2rem;
+    font-weight: 300;
+}
+
+h3 {
+    color: #8ca2b5;
+    font-size:  1.4rem;
+    margin: 0 0 2em 0;
+}
+
+h4 {
+    color: #8ca2b5;
+    font-weight: 300;
+    margin: 0;
+    margin-bottom: 1em;
+    text-align: left;
+    display: block;
+    font-size: 1.1em;
+}
+
+.form-control {
+    border-radius: 2px;
+    border: solid #ddd 1px;
+    box-shadow: none;
+}
+.dd-no-margins {
+    margin: 0;
+}
+
+.dd-sub-spiel {
+    text-align: center;
+    color: #999;
+    font-size: 1.38rem;
+}
+
+.dd-sub-spiel a {
+    color: #78b7e8;
+}
+
+.dd-header-logo {max-width: 10.5rem;}
+
+.dd-header {
+    display:  flex;
+    align-items: center;
+    justify-content:  space-between;
+    padding-bottom: 7rem;
+}
+
+.dd-header ul {
+  list-style-type: none;
+}
+
+.dd-header-buttons {
+    display: flex;
+    flex-direction:  row;
+    align-items: center;
+    justify-content: flex-end;
+    padding:  0;
+    margin:  0;
+    width:  60%;
+}
+
+.dd-component {
+    border: solid #dde5ed 1px;
+    border-radius: 8px;
+    margin: 1.2rem;
+    transition: max-height 0.25s ease-in;
+    width: 76%;
+    padding: 60px 60px 30px 60px;
+}
+
+.btn-primary {
+    color: #1e8ceb;
+    background-color: #dcf5fd;
+    border-color: #E3F4FD;
+    background-image: none;
+    /* margin-top: 15px; */
+}
+
+.btn-primary:hover {
+    background-image: none;
+    border-color: #CDE8F6;
+    background-color: #CDE8F6;
+    color: #1e8ceb;
+}
+
+.btn-primary:disabled {
+  background-color: #d3e4eD;
+  border-color: #E3F4FD;
+  color: #1e5c9b;
+  opacity: .6;
+}
+
+
+.dd-component-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    padding-top: 1rem;
+    flex-wrap: wrap;
+}
+
+.dd-or {font-size: 1.5em;color: #8ca2b5;padding-top: 2em;}
+
+.dd-button-row {
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    width: 100%;
+    padding-top: 30px;
+}
+
+.dd-button-row .btn {
+    margin-left: 1.5em;
+}
+
+
+.dd-finalize-button .btn {
+    font-size: 1.6rem;
+}
+
+.dd-import-buttons {
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.dd-import-button .btn {
+    margin-top: 0px;
+    width: 8rem;
+}
+
+.dd-generate-new {
+    width: 44%;
+}
+
+.dd-step-row {
+    flex-direction: column;
+    display: flex;
+    margin: 1em 0 2em 0;
+    flex-wrap: wrap;
+}
+
+.dd-finalize-button {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.dd-import-claims .btn {
+    margin-top:  0.7rem;
+}
+
+.dd-main-container {
+    width: 1180px;
+    margin: auto;
+}
+
+.dd-header-buttons > * {
+    margin-left: 1rem;
+}
+
+
+/* These are required for google's material.io font icons */
+
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(./images/MaterialIcons-Regular.eot); /* For IE6-8 */
+  src: local('Material Icons'),
+    local('MaterialIcons-Regular'),
+    url(./MaterialIcons-Regular.woff2) format('woff2'),
+    url(./MaterialIcons-Regular.woff) format('woff'),
+    url(./MaterialIcons-Regular.ttf) format('truetype');
+}
+
+.material-icons {
+  font-family: 'Material Icons';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 1.2em;  /* Preferred icon size */
+  display: inline-block;
+  line-height: 1;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  white-space: nowrap;
+  direction: ltr;
+
+  /* Support for all WebKit browsers. */
+  -webkit-font-smoothing: antialiased;
+  /* Support for Safari and Chrome. */
+  text-rendering: optimizeLegibility;
+
+  /* Support for Firefox. */
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Support for IE. */
+  font-feature-settings: 'liga';
+}
+
+/* End google css for material.io */
+
+
+
+.dd-header-rates {
+  display:  flex;
+  flex-direction:  column;
+  margin:  0;
+  padding: 2rem 0 0 0;
+}
+
+
+
+.dd-header-buttons a {
+  margin: 0 0 0 1rem;
+}
+
+.btn {
+    border-radius: 2rem;
+    padding: 0.5em 1.5em 0.5em 1.5em;
+    font-size: inherit;
+}
+
+
+.btn i {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.dd-spiel-containter {
+    justify-content: center;
+}
+
+
+.dd-spiel {
+    padding: 0 22% 0 22%;
+}
+
+
+
+.dd-component-icons {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6em 0 0.6em 0;
+}
+
+.dd-component-icons > div img {
+    float: left;
+    margin-right: 1em;
+    width:  2.5rem;
+}
+
+.dd-component-icons > div {
+    width: 48.5%;
+    font-size: 0.9em;
+    padding: 1em;
+    border: solid 1px #ccc;
+    border-radius: 4px;
+    background-color: #f9f9fb;
+}
+
+.dd-component.dd-component-pair p {
+    min-height: 4.5em;
+}
+
+.dd-component .btn {
+    font-size: 0.9em;
+    margin-top: 1em;
+}
+
+.dd-insight-info {
+    border: solid 1px #dde5ed;
+    border-radius: 5px;
+    padding:  1em;
+    width: 77%;
+    margin: auto;
+    margin-top: 5em;
+    margin-bottom: 2em;
+    text-align: center;
+    color: #8ca2b5;
+    font-size: 0.9rem;
+}
+
+
+.dd-insight-info input {
+    padding: 0 1em 0 1em;
+    height: 100%;
+    border: solid #dde5ed 1px;
+    border-width: 0 0 0 1px;
+    width: 79%;
+    display: inline-block;
+    border-radius: 0;
+    box-shadow:  none;
+    margin-left: 1em;
+    font-weight: 500;
+}
+
+.dd-insight-info input:before {
+    content: "url";
+    display: inline-block;
+    color: black;
+    background: red;
+    border:  solid black;
+}
+
+.dd-check-circle {
+    display: inline-block;
+}
+
+.dd-insight-info label {
+    ne-block;
+    height: 3.3em;
+    text-align: center;
+    border: solid #dde5ed 1px;
+    border-radius: 3.4em;
+    width: 38em;
+    display: inline-block;
+    padding-left: 1em;
+    font-weight: 300;
+    background-color: #f9f9fb;
+    margin: 1em 0 2em 0;
+    overflow: hidden;
+}
+
+
+.dd-insight-info label img {
+    width: 5.16em;
+    vertical-align: initial;
+    margin: 0px;
+    float: right;
+    padding: 0.9em;
+    padding-left: 2.9em;
+    background-color: white;
+}
+
+.dd-credits {
+    text-align: center;
+    margin: 2em 0 1em 0;
+}
+
+.dd-component.dd-component-pair {
+    width: 37%;
+    padding: 30px 30px 20px 30px;
+}
+
+.dd-first-step {
+    margin-top: 4em;
+    justify-content: space-between;
+    flex-direction: row;
+}
+
+.dd-component h4 {
+    font-size: 0.86rem;
+    text-transform: uppercase;
+    margin-bottom: 0.5em;
+}
+
+.import-exising {
+    width: 18.7em;
+}
+
+.dd-dnd-csv {
+    border: dashed #e5e5e5 2px;
+    display: flex;
+    height: 7em;
+    justify-content: center;
+}
+
+.dd-dnd-csv img {
+    width: 0.87em;
+}
+
+.dd-component .btn-link {
+    font-size: 1em;
+    padding: 0;
+    border: none;
+}
+
+.dd-import-buttons .btn {
+    margin-right: 1.5em;
+}
+
+.dd-warning {
+    color: #e55;
+}
+
+.dd-csv-view {
+    width: 100%;
+}
+
+.dd-csv-view pre {
+    margin-bottom: 4em;
+    padding: 0;
+    border: none;
+}
+
+.dd-wallet-key-warning {
+    padding-right: 7em;
+}
+
+.dd-print-save-subtext {
+    text-align: right;
+    font-size: 0.8em;
+    color: rgb(140, 162, 181);
+    position: relative;
+    top: 3em;
+    margin-top: -2em;
+}
+
+.dd-dist-transaction-amounts {
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    flex-direction: row;
+    margin: 2em 0 1em 0;
+}
+
+.dd-dist-transaction-amounts label {
+    width: 28%;
+    font-size: 0.9rem;
+    color: #8ca2b5;
+}
+
+.dd-csv-view textarea {
+    resize: vertical;
+    border-radius: 2px;
+    border: solid #ddd 1px;
+    box-shadow: none;
+    padding: 1.7em;
+}
+
+.dd-dist-address {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+    margin-top: 1em;
+}
+
+.dd-dist-qr-address {
+    width: 256px;
+}
+
+.dd-dist-existing-address {
+    width: 465px;
+    padding-bottom: 1em;
+}
+
+.btn-primary:disabled:hover {
+    color: #bbb;
+}
+
+.dd-finalize-error {
+    color: #E55;
+    margin: 0.5em 0 0.5em 0;
+}
+
+.dd-finalize-button .btn {
+    font-size: 1.03em;
+    margin: 0;
+}
+
+.dd-finalize-button label {
+    font-weight: 400;
+    color: #8ca2b5;
+}
+
+.dd-finalize-button > div {
+    display:  flex;
+    flex-direction:  column;
+    align-items:  flex-end;
+}
+
+
+.dd-load-local {
+    width: 18.7em;
+}
+
+.dd-import-claims {
+    width: 18.7em;
+}
+
+.dd-wallet-distribution-progress {width: 100%;}
+
+.dd-wallet-distribution {
+    margin: 0 2em 5em 2em;
+    justify-content: space-around;
+    flex-direction: row;
+}
+
+
+.dd-reclaim-details {
+    display:  flex;
+    justify-content: space-around;
+}
+
+.dd-reclaim-dash-dest-wallet {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-end;
+    width: 100%;
+    margin: 1em 0 3em 0;
+}
+
+.dd-source-wallet-balance .btn {
+    margin: 0;
+    vertical-align: initial;
+    padding-left: 4em;
+}
+
+.dd-source-wallet-balance {
+    margin-top: 5em;
+}
+
+
+.btn.btn-primary:active, .btn.btn-primary:focus {background-color: #E3F4FD;border: none;color: #4593ee;outline: none;}
+
+.dd-reclaim-finalize {
+    font-size: 1.2em;
+    display:  flex;
+    justify-content: flex-end;
+}
+
+.dd-dist-num-transactions {
+    display: none;
+
+}
+
+.dd-input-pair-unit {
+    position: absolute;
+    right: 0.5rem;
+    top: 0.85rem;
+    color: #8ca2b5;
+    font-weight: normal;
+    font-size: 0.9rem;
+}
+
+.dd-input-pair-left {
+    font-weight: 500;
+    width: 50%;
+    position: relative;
+    display: inline-block;
+}
+
+
+.dd-input-pair-right {
+    width: 50%;
+    display: inline-block;
+    position: relative;
+    font-weight: 500;
+}
+
+.dd-input-pair {
+    width:100%;
+    margin: 0.5rem 0 0.5rem 0;
+}
+
+
+.dd-input-pair-left input {
+    border-radius: 2rem 0 0 2rem;
+    height: 3rem;
+    padding-left: 1rem;
+}
+
+.dd-input-pair-right input {
+    border-radius: 0 2rem 2rem 0;
+    border-left: none;
+    height: 3rem;
+}
+
+.dd-input-pair-right .dd-input-pair-unit {
+    right: 1rem;
+}
+
+.dd-round-styled-input {
+    color: #8ca2b5;
+    width: 100%;
+    border-radius: 2em;
+    border: solid 1px #ddd;
+    position: relative;
+    height: 3em;
+    font-size: 0.9rem;
+    background: #F9F9FB;
+    padding-left: 1em;
+    font-weight: normal;
+    line-height: 3em;
+}
+
+label {}
+
+.dd-round-styled-input input {
+    width: 50%;
+    position: absolute;
+    display: inline;
+    right: 0;
+    height: 100%;
+    border: none;
+    border-left: solid 1px #ddd;
+    border-radius: 0 2rem 2rem 0;
+    padding-right: 1rem;
+    text-align: right;
+    font-size: 1.2em;
+}
+
+.dd-generate-new label {
+    width: 80%;
+}
+
+.dd-reclaim-details label {
+    margin: 1.5em 0 1.5em 0;
+    width: 35%;
+}

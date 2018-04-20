@@ -1,0 +1,21 @@
+{
+  "name": "dash-airdrop.html",
+  "version": "1.0.0",
+  "description": "helps track the status of paper wallet give-aways, aka \"airdrops\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://gitea@git.coolaj86.com:22042/coolaj86/dash-airdrop.html.git"
+  },
+  "author": "AJ ONeal <coolaj86@gmail.com> (https://coolaj86.com/)",
+  "license": "(MIT OR Apache-2.0)",
+  "dependencies": {
+    "bitcore-lib-dash": "^0.15.0",
+    "bluebird": "^3.5.1",
+    "qrcode": "^1.2.0",
+    "request": "^2.83.0"
+  }
+}
