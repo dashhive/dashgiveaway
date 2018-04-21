@@ -18,7 +18,9 @@ class Header extends React.Component {
     return (
       <header>
         <div className="container">
-          <div className="logo"><img src="/img/logo.png" alt=""/></div>
+          <div className="logo">
+            <img src="/img/logo.png" alt=""/>
+          </div>
           <h2>1 DASH = {this.state.currency} USD</h2>
         </div>
       </header>
