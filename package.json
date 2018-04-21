@@ -3,6 +3,15 @@
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dashhive/dashgiveaway.git"
+  },
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5",
+    "yarn": ">=1"
+  },
   "dependencies": {
     "isomorphic-fetch": "^2.2.1",
     "react": "^16.3.2",
