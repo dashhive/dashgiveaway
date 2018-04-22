@@ -10,9 +10,20 @@
   margin: 2em auto;
 }
 
-.logo {
-  display: flex;
-  margin: auto;
+@media (max-width: 1000px) {
+  .container {
+    padding: 0 1em;
+    max-width: 100%;
+    flex: 0 0 auto;
+  }
+}
+
+.logo img {
+  display: inline-block;
+  width: 100%;
+  height: auto;
+  max-width: 312px;
+  vertical-align: middle;
 }
 
 .buttons {
