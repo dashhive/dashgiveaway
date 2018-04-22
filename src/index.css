@@ -1,5 +1,55 @@
-body {
+:global(html),
+:global(body) {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:global(html) {
+  position: relative;
+  font-size: 14px;
+
+  /* https://css-tricks.com/snippets/css/fluid-typography/ */
+  font-size: calc(16px + (20 - 16) * ((100vw - 300px) / (2000 - 300)));
+
+  box-sizing: border-box;
+}
+
+:global(*),
+:global(*:before),
+:global(*:after) {
+  box-sizing: inherit;
+}
+
+:global(body) {
+  font-size: 1rem;
+  position: relative;
+  color: #62717f;
+  line-height: 1.5;
+}
+
+:global(h2) {
+  color: #1e8ceb;
+  margin: 1em;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+:global(h3) {
+  color: #8ca2b5;
+  font-size: 1.4rem;
+  margin: 0 0 2em 0;
+}
+
+:global(h4) {
+  color: #8ca2b5;
+  font-weight: 300;
+  margin: 0;
+  margin-bottom: 1em;
+  text-align: left;
+  display: block;
+  font-size: 1.1em;
 }

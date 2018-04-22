@@ -17,7 +17,7 @@ class Header extends React.Component {
   render() {
     return (
       <header className={s.root}>
-        <div className="container">
+        <div className={s.container}>
           <div className="logo">
             <img src="/img/logo.png" alt="" />
           </div>
