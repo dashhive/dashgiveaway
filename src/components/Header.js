@@ -1,5 +1,5 @@
 import React from 'react'
-import { getDashCurrency } from '../api/currency'
+import { getDashCurrency } from 'api/currency'
 import s from './Header.css'
 class Header extends React.Component {
   constructor(props) {
