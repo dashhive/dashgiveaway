@@ -20,7 +20,7 @@ class Header extends React.Component {
     return (
       <header className={s.root}>
         <div className={s.container}>
-          <div className="logo">
+          <div className={s.logo}>
             <img src="/img/logo.png" alt="" />
           </div>
           <h2>1 DASH = {this.state.currency} USD</h2>
