@@ -1,0 +1,78 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+}
+
+@media (max-width: 910px) {
+  .root {
+    padding: 0 1em;
+  }
+}
+
+.url {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: solid 1px #dde5ed;
+  border-radius: 5px;
+  padding: 1em;
+  width: 100%;
+  margin: auto;
+  margin-top: 5em;
+  margin-bottom: 2em;
+  text-align: center;
+  color: #8ca2b5;
+  font-size: 0.9rem;
+}
+
+.url h2 {
+  margin: 0.5em auto 0.35em auto;
+}
+
+.url label {
+  height: 3.3em;
+  text-align: center;
+  border: solid #dde5ed 1px;
+  border-radius: 3.4em;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1em;
+  font-weight: 500;
+  background-color: #f9f9fb;
+  margin: 1em auto 1em auto;
+  overflow: hidden;
+}
+
+.url label img {
+  width: 5em;
+  vertical-align: initial;
+  margin: 0px;
+  padding: 0.9em;
+  background-color: white;
+  align-self: flex-end;
+  height: 100%;
+}
+
+.url input {
+  padding: 0 1em 0 1em;
+  height: 100%;
+  border: solid #dde5ed 1px;
+  border-width: 0 0 0 1px;
+  width: 85%;
+  display: inline-block;
+  border-radius: 0;
+  box-shadow: none;
+  margin-left: 1em;
+  font-weight: 500;
+  color: #666666;
+}
+
+.url input::placeholder {
+  color: #999999;
+}
