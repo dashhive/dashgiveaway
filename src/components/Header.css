@@ -9,3 +9,10 @@
   max-width: 1000px;
   margin: 2em auto;
 }
+
+.buttons {
+  display: flex;
+  justify-content: space-around;
+  width: 300px;
+  margin: 0 auto;
+}

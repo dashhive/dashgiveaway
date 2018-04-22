@@ -1,0 +1,42 @@
+.root {
+  cursor: pointer;
+  display: inline-flex;
+  padding: 0.5em 1em;
+  border-radius: 3.2px;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+
+  /* Reset <button> styles */
+  appearance: none;
+  -webkit-appearance: none;
+  outline: none;
+  border: none;
+  text-align: center;
+  transition: all 100ms ease-out;
+  text-decoration: none;
+}
+
+.primary {
+  color: #1e8ceb;
+  background-color: #dcf5fd;
+  border-color: #e3f4fd;
+}
+
+.primary:hover {
+  border-color: #cde8f6;
+  background-color: #cde8f6;
+  color: #1e8ceb;
+}
+
+.primary:disabled {
+  background-color: #d3e4ed;
+  border-color: #e3f4fd;
+  color: #1e5c9b;
+  opacity: 0.6;
+}
+
+.download svg {
+  margin-left: -0.3em;
+  margin-right: 0.3em;
+}
