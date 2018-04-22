@@ -1,6 +1,6 @@
 import React from 'react'
 import { getDashCurrency } from '../api/currency'
-
+import s from './Header.css'
 class Header extends React.Component {
   constructor(props) {
     super(props)
@@ -16,7 +16,7 @@ class Header extends React.Component {
   }
   render() {
     return (
-      <header>
+      <header className={s.root}>
         <div className="container">
           <div className="logo">
             <img src="/img/logo.png" alt="" />
