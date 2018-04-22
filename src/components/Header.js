@@ -36,6 +36,17 @@ class Header extends React.Component {
               Download
             </Button>
           </div>
+          <h2 className={s.title}>
+            <strong>Tools for Paper Wallet Giveaways</strong>
+          </h2>
+          <h3>
+            DashDrop was developed by <a href="https://github.com/dashhive">DashHive</a>{' '}
+            as a tool to help community members initiate, track, and reclaim paper wallets
+            at giveaways, conferences, and merchant gift card events. Proposal{' '}
+            <a href="https://www.dashcentral.org/p/dash-hive" target="_dashhive">
+              #dash-hive
+            </a>
+          </h3>
         </div>
       </header>
     )

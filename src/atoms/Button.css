@@ -17,6 +17,10 @@
   text-decoration: none;
 }
 
+.root:hover {
+  text-decoration: none;
+}
+
 .primary {
   color: #1e8ceb;
   background-color: #dcf5fd;

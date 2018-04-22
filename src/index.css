@@ -40,8 +40,9 @@
 
 :global(h3) {
   color: #8ca2b5;
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   margin: 0 0 2em 0;
+  font-weight: 500;
 }
 
 :global(h4) {
@@ -52,4 +53,14 @@
   text-align: left;
   display: block;
   font-size: 1.1em;
+}
+
+:global(a) {
+  color: #78b7e8;
+  text-decoration: none;
+}
+
+:global(a:hover) {
+  color: #78b7e8;
+  text-decoration: underline;
 }
