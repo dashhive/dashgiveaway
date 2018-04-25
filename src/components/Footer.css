@@ -1,0 +1,7 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 1em auto;
+  text-align: center;
+}
