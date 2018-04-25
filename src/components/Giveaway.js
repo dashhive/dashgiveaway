@@ -1,4 +1,5 @@
 import React from 'react'
+import Button from 'atoms/Button'
 import s from './Giveaway.css'
 
 class Giveaway extends React.Component {
@@ -16,7 +17,44 @@ class Giveaway extends React.Component {
   render() {
     return (
       <div className={s.root}>
-        <h1>Giveaway</h1>
+        <div className={s.actions}>
+          <div className={s.action}>
+            <h2>Disburse Funds</h2>
+            <p>
+              Choose a Funding Source and destination addreses. Generate and print secure
+              wallets or import CSV from paper.dash.org
+            </p>
+            <div className={s.icons}>
+              <div className={s.icon}>
+                <img src="/img/icon-generate.svg" alt="" />
+                <span>Generate Paper Wallets</span>
+              </div>
+              <div className={s.icon}>
+                <img src="/img/icon-import-csv.svg" alt="" />
+                <span>Import Paper CSV</span>
+              </div>
+            </div>
+            <Button primary>Spread Dash →</Button>
+          </div>
+          <div className={s.action}>
+            <h2>Review Giveaway</h2>
+            <p>
+              See the impact your giveaway has had. Reclaim unused wallets for another
+              round.
+            </p>
+            <div className={s.icons}>
+              <div className={s.icon}>
+                <img src="/img/icon-measure.svg" alt="" />
+                <span>Measure Outreach</span>
+              </div>
+              <div className={s.icon}>
+                <img src="/img/icon-reclaim.svg" alt="" />
+                <span>Recycle Unused Wallets</span>
+              </div>
+            </div>
+            <Button primary>Check Status →</Button>
+          </div>
+        </div>
         <div className={s.url}>
           <h2>Insight API URL</h2>
           <label>
