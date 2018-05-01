@@ -1,5 +1,6 @@
 import React from 'react'
 import Button from 'atoms/Button'
+import Generate from './Generate'
 import s from './Giveaway.css'
 
 class Giveaway extends React.Component {
@@ -84,6 +85,7 @@ class Giveaway extends React.Component {
             </a>.
           </p>
         </div>
+        <Generate />
       </div>
     )
   }

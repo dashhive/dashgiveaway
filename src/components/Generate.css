@@ -1,0 +1,34 @@
+.root {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: solid 1px #dde5ed;
+  border-radius: 5px;
+  padding: 3em;
+  width: 100%;
+  margin: auto;
+  margin-top: 5em;
+  margin-bottom: 2em;
+  color: #8ca2b5;
+  font-size: 0.9rem;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.or {
+  font-size: 1.5em;
+  color: #8ca2b5;
+  padding-top: 2em;
+}
+
+.existing {
+  width: 18.7em;
+}
+
+.new {
+  width: 44%;
+}
