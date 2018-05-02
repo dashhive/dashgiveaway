@@ -1,8 +1,90 @@
 import React from 'react'
 import Button from 'atoms/Button'
+import DashDrop from 'dashdrop'
+import bitcore from 'bitcore-lib-dash'
 import s from './Generate.css'
 
 class Generate extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      url: 'https://insight.dash.org/api',
+    }
+    this.generateWallets = this.generateWallets.bind(this)
+    this._getWallets = this._getWallets.bind(this)
+  }
+  generateWallets() {
+    console.log('generateWallets:')
+    const keypairs = this._getWallets().filter(function(keypair) {
+      if (keypair.privateKey && !keypair.amount) {
+        return true
+      }
+    })
+    const walletQuantity = 100
+    var i
+    var bitkey
+    let data = []
+    //data.privateKeys
+    for (i = keypairs.length; i < walletQuantity; i += 1) {
+      bitkey = new bitcore.PrivateKey()
+      data.push({
+        privateKey: bitkey.toWIF(),
+        publicKey: bitkey.toAddress().toString(),
+        amount: 0,
+      })
+    }
+    const keypairsSplit = keypairs.slice(0, walletQuantity)
+    console.log('keypairsSplit: ', keypairsSplit)
+    const csv = DashDrop._toCsv(data.keypairs)
+    console.log('csv: ', csv)
+    // data.csv = DashDom._toCsv(csv)
+
+    // config.transactionFee = DashDom.estimateFee(config, data)
+    // DashDom.updateTransactionTotal()
+    // view.csv.show()
+  }
+
+  _getWallets() {
+    var i
+    var len = localStorage.length
+    var key
+    var wallets = []
+    var dashkey
+    var keypair
+
+    for (i = 0; i < len; i += 1) {
+      key = localStorage.key(i)
+      if (!/^dash:/.test(key)) {
+        continue
+        //return;
+      }
+
+      try {
+        keypair = JSON.parse(localStorage.getItem(key))
+        if (!isNaN(keypair)) {
+          keypair = { amount: keypair }
+        }
+      } catch (e) {
+        keypair = { amount: parseInt(localStorage.getItem(key), 10) || 0 }
+      }
+
+      dashkey = key.replace(/^dash:/, '')
+
+      if (!keypair || !keypair.publicKey) {
+        keypair = DashDrop._keyToKeypair(dashkey, keypair)
+      }
+
+      if (!keypair) {
+        console.warn('Not a valid cached key:', dashkey, localStorage.getItem(key))
+        continue
+        //return;
+      }
+
+      wallets.push(keypair)
+    }
+
+    return wallets
+  }
   render() {
     return (
       <div className={s.root}>
@@ -31,7 +113,7 @@ class Generate extends React.Component {
               Number of wallets
               <input type="number" placeholder="ex: 10" />
             </label>
-            <Button primary type="button">
+            <Button primary type="button" onClick={() => this.generateWallets()}>
               Generate
             </Button>
           </div>
