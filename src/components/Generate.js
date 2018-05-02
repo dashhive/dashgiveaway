@@ -4,12 +4,6 @@ import bitcore from 'bitcore-lib-dash'
 import s from './Generate.css'
 
 class Generate extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      url: 'https://insight.dash.org/api',
-    }
-  }
   generateWallets() {
     console.log('generateWallets:')
     let data = []
