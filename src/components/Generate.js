@@ -1,6 +1,5 @@
 import React from 'react'
 import Button from 'atoms/Button'
-import DashDrop from 'dashdrop'
 import bitcore from 'bitcore-lib-dash'
 import s from './Generate.css'
 
@@ -10,12 +9,11 @@ class Generate extends React.Component {
     this.state = {
       url: 'https://insight.dash.org/api',
     }
-    this.generateWallets = this.generateWallets.bind(this)
-    this._getWallets = this._getWallets.bind(this)
   }
   generateWallets() {
     console.log('generateWallets:')
-    const keypairs = this._getWallets().filter(function(keypair) {
+    let data = []
+    data.keypairs = this._getWallets().filter(function(keypair) {
       if (keypair.privateKey && !keypair.amount) {
         return true
       }
@@ -23,20 +21,19 @@ class Generate extends React.Component {
     const walletQuantity = 100
     var i
     var bitkey
-    let data = []
+
     //data.privateKeys
-    for (i = keypairs.length; i < walletQuantity; i += 1) {
+    for (i = data.keypairs.length; i < walletQuantity; i += 1) {
       bitkey = new bitcore.PrivateKey()
-      data.push({
+      data.keypairs.push({
         privateKey: bitkey.toWIF(),
         publicKey: bitkey.toAddress().toString(),
         amount: 0,
       })
     }
-    const keypairsSplit = keypairs.slice(0, walletQuantity)
-    console.log('keypairsSplit: ', keypairsSplit)
-    const csv = DashDrop._toCsv(data.keypairs)
-    console.log('csv: ', csv)
+    data.keypairs = data.keypairs.slice(0, walletQuantity)
+    var csv = window.DashDrop.create()._toCsv(data.keypairs)
+    console.log(csv)
     // data.csv = DashDom._toCsv(csv)
 
     // config.transactionFee = DashDom.estimateFee(config, data)
@@ -71,7 +68,7 @@ class Generate extends React.Component {
       dashkey = key.replace(/^dash:/, '')
 
       if (!keypair || !keypair.publicKey) {
-        keypair = DashDrop._keyToKeypair(dashkey, keypair)
+        keypair = window.DashDrop.create()._keyToKeypair(dashkey, keypair)
       }
 
       if (!keypair) {
@@ -85,6 +82,7 @@ class Generate extends React.Component {
 
     return wallets
   }
+
   render() {
     return (
       <div className={s.root}>
