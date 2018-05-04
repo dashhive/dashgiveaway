@@ -1,11 +1,13 @@
 import React from 'react'
-import Button from 'atoms/Button'
 import bitcore from 'bitcore-lib-dash'
+import Button from 'atoms/Button'
+import Input from 'atoms/Input'
 import s from './Generate.css'
 
 class Generate extends React.Component {
   state = {
     csv: null,
+    walletQuantity: '100',
   }
   generateWallets() {
     console.log('generateWallets:')
@@ -15,7 +17,7 @@ class Generate extends React.Component {
         return true
       }
     })
-    const walletQuantity = 100
+    const walletQuantity = parseInt(this.state.walletQuantity, 10)
     var i
     var bitkey
 
@@ -81,8 +83,8 @@ class Generate extends React.Component {
     return wallets
   }
 
-  handleChange(csv) {
-    this.setState({ csv })
+  handleChange(input, value) {
+    this.setState({ [input]: value })
   }
 
   render() {
@@ -108,11 +110,14 @@ class Generate extends React.Component {
           <div className={s.new}>
             <h4>Generate New</h4>
             <p>Input how many new, empty wallets you'd like to generate.</p>
-            <label className={s.round}>
-              {' '}
-              Number of wallets
-              <input type="number" placeholder="ex: 10" />
-            </label>
+            <Input
+              label="Number of wallets"
+              type="number"
+              placeholder="ex: 10"
+              value={this.state.walletQuantity}
+              onChange={e => this.handleChange('walletQuantity', e.target.value)}
+            />
+
             <Button primary type="button" onClick={() => this.generateWallets()}>
               Generate
             </Button>
@@ -122,10 +127,29 @@ class Generate extends React.Component {
           {this.state.csv && (
             <textarea
               value={this.state.csv}
-              onChange={e => this.handleChange(e.target.value)}
+              onChange={e => this.handleChange('csv', e.target.value)}
             />
           )}
         </div>
+        {this.state.csv && (
+          <div className={s.save}>
+            <div>
+              <span className={s.warning}>Save CSV file before proceeding</span>
+              <p>
+                If you lose this file, all the money you put into these wallets will be
+                lost!
+              </p>
+            </div>
+            <div className={s.saveActions}>
+              <div>
+                <Button primary>Print</Button>
+              </div>
+              <div>
+                <Button primary>Download&nbsp;.csv</Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     )
   }
