@@ -4,6 +4,9 @@ import bitcore from 'bitcore-lib-dash'
 import s from './Generate.css'
 
 class Generate extends React.Component {
+  state = {
+    csv: null,
+  }
   generateWallets() {
     console.log('generateWallets:')
     let data = []
@@ -28,6 +31,7 @@ class Generate extends React.Component {
     data.keypairs = data.keypairs.slice(0, walletQuantity)
     var csv = window.DashDrop.create()._toCsv(data.keypairs)
     console.log(csv)
+    this.setState({ csv })
     // data.csv = DashDom._toCsv(csv)
 
     // config.transactionFee = DashDom.estimateFee(config, data)
@@ -109,6 +113,9 @@ class Generate extends React.Component {
               Generate
             </Button>
           </div>
+        </div>
+        <div className={s.textarea}>
+          {this.state.csv && <textarea>{this.state.csv}</textarea>}
         </div>
       </div>
     )

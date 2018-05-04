@@ -32,3 +32,18 @@
 .new {
   width: 44%;
 }
+
+.textarea {
+  margin-top: 2em;
+}
+
+.textarea textarea {
+  resize: vertical;
+  border-radius: 2px;
+  border: solid #ddd 1px;
+  box-shadow: none;
+  padding: 1.7em;
+  width: 100%;
+  height: 200px;
+  font-size: 12px;
+}
