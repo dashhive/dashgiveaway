@@ -146,7 +146,9 @@ class Generate extends React.Component {
             </div>
             <div className={s.saveActions}>
               <div>
-                <Button primary>Print</Button>
+                <Button primary onClick={() => window.print()}>
+                  Print
+                </Button>
               </div>
               <div>
                 <Button primary>Download&nbsp;.csv</Button>
