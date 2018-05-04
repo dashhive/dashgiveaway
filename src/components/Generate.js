@@ -84,6 +84,14 @@ class Generate extends React.Component {
     return wallets
   }
 
+  downloadCsv(csv) {
+    const hiddenElement = document.createElement('a')
+    hiddenElement.href = 'data:text/csv;base64,' + btoa(csv)
+    hiddenElement.target = '_blank'
+    hiddenElement.download = 'dash-paper-wallets.csv'
+    hiddenElement.click()
+  }
+
   handleChange(input, value) {
     this.setState({ [input]: value })
   }
@@ -151,7 +159,9 @@ class Generate extends React.Component {
                 </Button>
               </div>
               <div>
-                <Button primary>Download&nbsp;.csv</Button>
+                <Button primary onClick={() => this.downloadCsv(this.state.csv)}>
+                  Download&nbsp;.csv
+                </Button>
               </div>
             </div>
           </div>
