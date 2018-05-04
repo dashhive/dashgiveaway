@@ -29,8 +29,17 @@
   width: 18.7em;
 }
 
+.existing button {
+  margin-bottom: 1em;
+  margin-right: 1em;
+}
+
 .new {
   width: 44%;
+}
+
+.new button {
+  margin-top: 1em;
 }
 
 .textarea {
@@ -71,4 +80,17 @@
 .warning {
   color: #e55;
   text-transform: uppercase;
+}
+
+@media (max-width: 800px) {
+  .wrapper {
+    flex-direction: column;
+    justify-content: center;
+  }
+  .wrapper > * {
+    width: 100%;
+  }
+  .or {
+    padding-bottom: 2em;
+  }
 }

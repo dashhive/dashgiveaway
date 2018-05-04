@@ -101,8 +101,8 @@ class Generate extends React.Component {
             <div className={s.importButtons}>
               <Button primary>Paste CSV</Button>
               <Button primary>Upload CSV</Button>
-              <input type="file" className={s.file} accept="text/*" />
             </div>
+            <input type="file" className={s.file} accept="text/*" />
           </div>
 
           <div className={s.or}>OR</div>

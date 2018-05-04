@@ -9,7 +9,7 @@ class Input extends React.Component {
         <label className={s.label}>
           {this.props.label}
           <input
-            type={this.props.type}
+            type={this.props.type || 'text'}
             className={s.input}
             placeholder={this.props.placeholder}
             value={this.props.value}
