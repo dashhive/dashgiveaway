@@ -1,5 +1,6 @@
 import React from 'react'
 import bitcore from 'bitcore-lib-dash'
+import { Portal } from 'react-portal'
 import Button from 'atoms/Button'
 import Input from 'atoms/Input'
 import s from './Generate.css'
@@ -133,6 +134,9 @@ class Generate extends React.Component {
         </div>
         {this.state.csv && (
           <div className={s.save}>
+            <Portal>
+              <div className="dd-print-only">{this.state.csv}</div>
+            </Portal>
             <div>
               <span className={s.warning}>Save CSV file before proceeding</span>
               <p>

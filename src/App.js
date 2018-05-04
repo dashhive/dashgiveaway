@@ -10,7 +10,7 @@ import 'dashdrop'
 class App extends Component {
   render() {
     return (
-      <div className={s.root}>
+      <div className={`${s.root} dd-screen-only`}>
         <Header />
         <Giveaway />
         <Footer />
