@@ -81,6 +81,10 @@ class Generate extends React.Component {
     return wallets
   }
 
+  handleChange(csv) {
+    this.setState({ csv })
+  }
+
   render() {
     return (
       <div className={s.root}>
@@ -115,7 +119,12 @@ class Generate extends React.Component {
           </div>
         </div>
         <div className={s.textarea}>
-          {this.state.csv && <textarea>{this.state.csv}</textarea>}
+          {this.state.csv && (
+            <textarea
+              value={this.state.csv}
+              onChange={e => this.handleChange(e.target.value)}
+            />
+          )}
         </div>
       </div>
     )
