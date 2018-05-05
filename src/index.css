@@ -64,3 +64,9 @@
   color: #78b7e8;
   text-decoration: underline;
 }
+
+@media not print {
+  :global(.dd-print-only) {
+    display: none;
+  }
+}
