@@ -93,11 +93,11 @@ class Generate extends React.Component {
   }
 
   _parseFileCsv(file, cb) {
-    var reader = new FileReader()
-    reader.addEventListener('error', function() {
+    const reader = new FileReader()
+    reader.addEventListener('error', () => {
       window.alert('Error parsing CSV')
     })
-    reader.addEventListener('load', function(ev) {
+    reader.addEventListener('load', ev => {
       const csv = ev.target.result
       // $('.js-paper-wallet-keys').val(data.csv);
       console.log('data.csv:')
