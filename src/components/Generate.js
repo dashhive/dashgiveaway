@@ -92,6 +92,35 @@ class Generate extends React.Component {
     hiddenElement.click()
   }
 
+  _parseFileCsv(file, cb) {
+    var reader = new FileReader()
+    reader.addEventListener('error', function() {
+      window.alert('Error parsing CSV')
+    })
+    reader.addEventListener('load', function(ev) {
+      const csv = ev.target.result
+      // $('.js-paper-wallet-keys').val(data.csv);
+      console.log('data.csv:')
+      console.log(csv)
+      // DashDom._updateWalletCsv($('.js-paper-wallet-keys'));
+      // console.log('data.keypairs:')
+      // console.log(data.keypairs)
+      cb(csv)
+    })
+    reader.readAsText(file)
+  }
+
+  importFileCsv(file) {
+    console.log(file)
+    this._parseFileCsv(file, csv => {
+      this.setState({ csv })
+    })
+  }
+
+  pasteCsv() {
+    this.setState({ csv: ' ' })
+  }
+
   handleChange(input, value) {
     this.setState({ [input]: value })
   }
@@ -108,10 +137,17 @@ class Generate extends React.Component {
               <img src="/img/icon-upload-arrow.svg" />
             </div>
             <div className={s.importButtons}>
-              <Button primary>Paste CSV</Button>
+              <Button primary onClick={() => this.pasteCsv()}>
+                Paste CSV
+              </Button>
               <Button primary>Upload CSV</Button>
             </div>
-            <input type="file" className={s.file} accept="text/*" />
+            <input
+              type="file"
+              className={s.file}
+              onChange={e => this.importFileCsv(e.target.files[0])}
+              accept="text/*"
+            />
           </div>
 
           <div className={s.or}>OR</div>
