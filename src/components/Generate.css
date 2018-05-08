@@ -82,6 +82,16 @@
   text-transform: uppercase;
 }
 
+.inputsRow {
+  display: flex;
+  justify-content: space-between;
+  margin: 1em -1em;
+}
+
+.inputsRow > * {
+  margin: 1em;
+}
+
 @media (max-width: 800px) {
   .wrapper {
     flex-direction: column;

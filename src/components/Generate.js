@@ -4,6 +4,7 @@ import { Portal } from 'react-portal'
 import { QRCode } from 'react-qr-svg'
 import Button from 'atoms/Button'
 import Input from 'atoms/Input'
+import InputPair from 'atoms/InputPair'
 import s from './Generate.css'
 
 class Generate extends React.Component {
@@ -13,6 +14,12 @@ class Generate extends React.Component {
     transactionTotal: 0,
     fundingTotal: 0,
     fundingKeyPublic: 0,
+    amountDash: '0.01',
+    amountUSD: '4.41',
+    feeDash: '0.0004',
+    feeUSD: '0.17',
+    totalDash: '1.0004',
+    totalUSD: '441.50',
   }
   generateWallets() {
     console.log('generateWallets:')
@@ -218,6 +225,37 @@ class Generate extends React.Component {
                 </Button>
               </div>
             </div>
+          </div>
+        )}
+        {this.state.csv && (
+          <div className={s.inputsRow}>
+            <InputPair
+              label="Amount per Wallet"
+              unit="DASH"
+              unitTwo="USD"
+              value={this.state.amountDash}
+              valueTwo={this.state.amountUSD}
+              onChange={e => this.handleChange('amountDash', e.target.value)}
+              onChangeTwo={e => this.handleChange('amountUSD', e.target.value)}
+            />
+            <InputPair
+              label="Per Transaction Fee"
+              unit="DASH"
+              unitTwo="USD"
+              value={this.state.feeDash}
+              valueTwo={this.state.feeUSD}
+              onChange={e => this.handleChange('feeDash', e.target.value)}
+              onChangeTwo={e => this.handleChange('feeUSD', e.target.value)}
+            />
+            <InputPair
+              label="Total"
+              unit="DASH"
+              unitTwo="USD"
+              value={this.state.totalDash}
+              valueTwo={this.state.totalUSD}
+              onChange={e => this.handleChange('totalDash', e.target.value)}
+              onChangeTwo={e => this.handleChange('totalUSD', e.target.value)}
+            />
           </div>
         )}
         {this.state.csv && (
