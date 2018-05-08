@@ -1,6 +1,7 @@
 import React from 'react'
 import bitcore from 'bitcore-lib-dash'
 import { Portal } from 'react-portal'
+import { QRCode } from 'react-qr-svg'
 import Button from 'atoms/Button'
 import Input from 'atoms/Input'
 import s from './Generate.css'
@@ -9,6 +10,9 @@ class Generate extends React.Component {
   state = {
     csv: null,
     walletQuantity: '100',
+    transactionTotal: 0,
+    fundingTotal: 0,
+    fundingKeyPublic: 0,
   }
   generateWallets() {
     console.log('generateWallets:')
@@ -121,6 +125,20 @@ class Generate extends React.Component {
     this.setState({ csv: ' ' })
   }
 
+  // _updateFundingQr(fundingKeyPublic) {
+  //   console.log('fundingTotal:', this.state.fundingTotal)
+  //   var qrPublic = new QRCode({
+  //     element: document.querySelector('.js-funding-qr-public'),
+  //     value:
+  //       'dash:' +
+  //       fundingKeyPublic +
+  //       '?amount=' +
+  //       (window.DashDrop.create().toDash(this.state.transactionTotal) || 0),
+  //     size: 256,
+  //     background: '#CCFFFF',
+  //   })
+  // }
+
   handleChange(input, value) {
     this.setState({ [input]: value })
   }
@@ -201,6 +219,16 @@ class Generate extends React.Component {
               </div>
             </div>
           </div>
+        )}
+        {this.state.csv && (
+          <QRCode
+            style={{ width: 256 }}
+            bgColor="#CCFFFF"
+            value={`dash:${
+              this.state.fundingKeyPublic
+            }?amount=${window.DashDrop.create().toDash(this.state.transactionTotal) ||
+              0}`}
+          />
         )}
       </div>
     )
