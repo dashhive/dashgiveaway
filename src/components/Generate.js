@@ -10,7 +10,7 @@ import s from './Generate.css'
 class Generate extends React.Component {
   state = {
     csv: null,
-    walletQuantity: '100',
+    walletQuantity: 100,
     transactionTotal: 0,
     fundingTotal: 0,
     fundingKeyPublic: 0,
@@ -20,6 +20,16 @@ class Generate extends React.Component {
     feeUSD: '0.17',
     totalDash: '1.0004',
     totalUSD: '441.50',
+    minTransactionFee: 1000, // 1000 // 0 seems to give the "insufficient priority" error
+    transactionFee: 1000, // 1000 // 0 seems to give the "insufficient priority" error
+    walletAmount: 1000000,
+    serialize: { disableDustOutputs: true, disableSmallFees: true },
+    dashMultiple: 1000000,
+    SATOSHIS_PER_DASH: 100000000,
+    outputsPerTransaction: 1000, // theroetically 1900 (100kb transaction),
+    reclaimDirty: true,
+    UTXO_BATCH_MAX: 40, //100
+    transactionCount: 0,
   }
   generateWallets() {
     console.log('generateWallets:')
@@ -48,9 +58,71 @@ class Generate extends React.Component {
     this.setState({ csv })
     // data.csv = DashDom._toCsv(csv)
 
-    // config.transactionFee = DashDom.estimateFee(config, data)
-    // DashDom.updateTransactionTotal()
+    const transactionFee = this.estimateFee(data)
+    this.setState({ transactionFee })
+    console.log(transactionFee)
+    this.updateTransactionTotal(data)
     // view.csv.show()
+  }
+
+  estimateFee(data) {
+    var bitkey = new bitcore.PrivateKey()
+    var txOpts = {
+      src: bitkey.toWIF(),
+      dsts: data.keypairs.map(function(kp) {
+        return kp.publicKey
+      }),
+      amount: this.state.walletQuantity,
+      // some made-up address with infinite money
+      utxos: data.fundingUtxos || [
+        {
+          address: 'XwZ3CBB97JnyYi17tQdzFDhZJYCenwtMU8',
+          txid: 'af37fad079c34a8ac62a32496485f2f8815ddd8fd1d5ffec84f820a91d82a7fc',
+          vout: 2,
+          scriptPubKey: '76a914e4e0cc1758622358f04c7d4d6894201c7ca3a44788ac',
+          amount: 8601,
+          satoshis: 860100000000,
+          height: 791049,
+          confirmations: 6,
+        },
+      ],
+    }
+    return window.DashDrop.create().estimateFee(txOpts)
+  }
+
+  updateTransactionTotal(data) {
+    console.log('update transaction total', this.state.walletQuantity)
+    // TODO you can only have one transaction per UTXO
+    const transactionCount = Math.ceil(
+      this.state.walletQuantity / this.state.outputsPerTransaction,
+    )
+    this.setState({ transactionCount })
+    const estimatedTransactionFee = this.estimateFee(data)
+    this.setState({ estimatedTransactionFee })
+    const transactionTotal =
+      this.state.transactionCount * this.state.transactionFee +
+      this.state.walletAmount * this.state.walletQuantity
+
+    this.setState({ transactionTotal })
+    // $('input.js-transaction-fee-dash').val(DashDrop.toDash(config.transactionFee))
+    // $('span.js-transaction-fee-dash').text(DashDrop.toDash(config.transactionFee))
+    // $('input.js-transaction-fee-usd').val(DashDrop.toUsd(config.transactionFee))
+    // $('span.js-transaction-fee-usd').text(DashDrop.toUsd(config.transactionFee))
+    // $('.js-transaction-count').val(config.transactionCount)
+    // $('.js-transaction-count').text(config.transactionCount)
+    // $('input.js-transaction-total').val(DashDrop.toDash(config.transactionTotal))
+    // $('span.js-transaction-total').text(DashDrop.toDash(config.transactionTotal))
+    // $('input.js-transaction-total-usd').val(DashDrop.toUsd(config.transactionTotal))
+    // $('span.js-transaction-total-usd').text(DashDrop.toUsd(config.transactionTotal))
+    // if (data.fundingKey && config.transactionTotal <= data.fundingTotal) {
+    //   $('.js-transaction-commit-error').addClass('hidden')
+    //   $('button.js-transaction-commit').prop('disabled', false)
+    // } else {
+    //   $('.js-transaction-commit-error').removeClass('hidden')
+    //   $('button.js-transaction-commit').prop('disabled', true)
+    // }
+    // DashDom._updateFundingQr(data.fundingKeyPublic)
+    this.setState({ fundingKeyPublic: data.fundingKeyPublic })
   }
 
   _getWallets() {
