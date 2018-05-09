@@ -2,7 +2,6 @@ import React from 'react'
 import { connect } from 'react-redux'
 import { dashToUSDSelector, getDashToUSD } from 'store/dashToUSD'
 import Button from 'atoms/Button'
-import { getDashCurrency } from 'api/currency'
 import s from './Header.css'
 class Header extends React.Component {
   componentDidMount() {
