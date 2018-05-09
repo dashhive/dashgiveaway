@@ -303,30 +303,15 @@ class Generate extends React.Component {
           <div className={s.inputsRow}>
             <InputPair
               label="Amount per Wallet"
-              unit="DASH"
-              unitTwo="USD"
-              value={this.state.amountDash}
-              valueTwo={this.state.amountUSD}
-              onChange={e => this.handleChange('amountDash', e.target.value)}
-              onChangeTwo={e => this.handleChange('amountUSD', e.target.value)}
+              dash={this.state.amountDash}
             />
             <InputPair
               label="Per Transaction Fee"
-              unit="DASH"
-              unitTwo="USD"
-              value={this.state.feeDash}
-              valueTwo={this.state.feeUSD}
-              onChange={e => this.handleChange('feeDash', e.target.value)}
-              onChangeTwo={e => this.handleChange('feeUSD', e.target.value)}
+              dash={this.state.transactionFee / this.state.SATOSHIS_PER_DASH}
             />
             <InputPair
               label="Total"
-              unit="DASH"
-              unitTwo="USD"
-              value={this.state.totalDash}
-              valueTwo={this.state.totalUSD}
-              onChange={e => this.handleChange('totalDash', e.target.value)}
-              onChangeTwo={e => this.handleChange('totalUSD', e.target.value)}
+              dash={this.state.transactionTotal / this.state.SATOSHIS_PER_DASH}
             />
           </div>
         )}
