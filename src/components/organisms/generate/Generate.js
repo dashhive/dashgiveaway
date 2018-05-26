@@ -2,9 +2,10 @@ import React from 'react'
 import bitcore from 'bitcore-lib-dash'
 import { Portal } from 'react-portal'
 import { QRCode } from 'react-qr-svg'
-import Button from 'atoms/Button'
-import Input from 'atoms/Input'
-import InputPair from 'atoms/InputPair'
+import Button from '../../atoms/button/Button'
+import Input from '../../atoms/input/Input'
+import InputPair from '../input-pair/InputPair'
+import Card from '../../molecules/card/card'
 import s from './Generate.css'
 
 class Generate extends React.Component {
@@ -31,6 +32,7 @@ class Generate extends React.Component {
     UTXO_BATCH_MAX: 40, //100
     transactionCount: 0,
   }
+
   generateWallets() {
     console.log('generateWallets:')
     let data = []
@@ -224,14 +226,13 @@ class Generate extends React.Component {
 
   render() {
     return (
-      <div className={s.root}>
-        <h3>Import existing wallets or generate new ones</h3>
+      <Card className={s.root} title="Import existing wallets or generate new ones">
         <div className={s.wrapper}>
           <div className={s.existing}>
             <h4>Import Existing</h4>
             <p>Upload or paste CSV file to import an existing batch of wallets</p>
             <div className={s.dropzone} style={{ display: 'none' }}>
-              <img src="/img/icon-upload-arrow.svg" />
+              <img src="/img/icon-upload-arrow.svg"/>
             </div>
             <div className={s.importButtons}>
               <Button primary onClick={() => this.pasteCsv()}>
@@ -301,10 +302,7 @@ class Generate extends React.Component {
         )}
         {this.state.csv && (
           <div className={s.inputsRow}>
-            <InputPair
-              label="Amount per Wallet"
-              dash={this.state.amountDash}
-            />
+            <InputPair label="Amount per Wallet" dash={this.state.amountDash}/>
             <InputPair
               label="Per Transaction Fee"
               dash={this.state.transactionFee / this.state.SATOSHIS_PER_DASH}
@@ -321,11 +319,11 @@ class Generate extends React.Component {
             bgColor="#CCFFFF"
             value={`dash:${
               this.state.fundingKeyPublic
-            }?amount=${window.DashDrop.create().toDash(this.state.transactionTotal) ||
-              0}`}
+              }?amount=${window.DashDrop.create().toDash(this.state.transactionTotal) ||
+            0}`}
           />
         )}
-      </div>
+      </Card>
     )
   }
 }

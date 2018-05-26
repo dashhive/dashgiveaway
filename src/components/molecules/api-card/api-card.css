@@ -1,0 +1,59 @@
+.card__url {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  margin: 5em auto 2em;
+  text-align: center;
+  color: #8ca2b5;
+  font-size: 0.9rem;
+}
+
+.card__url__h2 {
+  margin: 0.5em auto 0.35em auto;
+}
+
+.card__url__label {
+  height: 3.3em;
+  text-align: center;
+  border: solid #dde5ed 1px;
+  border-radius: 3.4em;
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-left: 1em;
+  font-weight: 500;
+  background-color: #f9f9fb;
+  margin: 1em auto 1em auto;
+  overflow: hidden;
+}
+
+.card__url__img {
+  width: 5em;
+  vertical-align: initial;
+  margin: 0px;
+  padding: 0.9em;
+  background-color: white;
+  align-self: flex-end;
+  height: 100%;
+}
+
+.card__url__input {
+  padding: 0 1em 0 1em;
+  height: 100%;
+  border: solid #dde5ed 1px;
+  border-width: 0 0 0 1px;
+  width: 85%;
+  display: inline-block;
+  border-radius: 0;
+  box-shadow: none;
+  margin-left: 1em;
+  font-weight: 500;
+  color: #666666;
+}
+
+.card__url__input::placeholder {
+  color: #999999;
+}

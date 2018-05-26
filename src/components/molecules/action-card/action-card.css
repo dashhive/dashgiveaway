@@ -1,0 +1,35 @@
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin: -1.2rem;
+}
+
+.card__action {
+  margin: 1.2rem auto;
+  width: 100%;
+  max-width: 30em;
+}
+
+@media (min-width: 800px) {
+  .card__action {
+    margin: 1.2rem;
+    width: 50%;
+  }
+}
+
+.card__action__p {
+  min-height: 4.5em;
+}
+
+.icons {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6em 0 0.6em 0;
+  margin-bottom: 0.5em;
+}
+
+@media (max-width: 400px) {
+  .icons {
+    flex-direction: column;
+  }
+}

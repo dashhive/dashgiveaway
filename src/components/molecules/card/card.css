@@ -1,0 +1,9 @@
+.card {
+  padding: 30px 30px 20px 30px;
+  border: solid 1px #dde5ed;
+  border-radius: 5px;
+}
+
+.card__h2 {
+  margin-top: 0;
+}

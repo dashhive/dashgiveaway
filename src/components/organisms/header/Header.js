@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import { dashToUSDSelector, getDashToUSD } from 'store/dashToUSD'
-import Button from 'atoms/Button'
+import Button from '../../atoms/button/Button'
 import s from './Header.css'
 class Header extends React.Component {
   componentDidMount() {
