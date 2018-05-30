@@ -758,7 +758,7 @@ console.log('fundingTotal:', data.fundingTotal);
     return DashDom.inspectWallets(wallets);
   };
   DashDom.initCsv = function () {
-    var wallets = data.keypairs; //DashDom._getWallets();
+    var wallets = data.keypairs //DashDom.getWallets();
     //return DashDom.inspectWallets(wallets);
     return DashDom.inspectWallets(wallets);
   };

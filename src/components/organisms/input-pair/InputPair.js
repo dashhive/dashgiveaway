@@ -1,44 +1,71 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { dashToUSDSelector } from 'store/dashToUSD'
 import s from './InputPair.css'
 
-class Input extends React.Component {
-  state = {
-    dash: this.props.dash || 0,
-    usd: (this.props.dash * this.props.dashToUSD).toFixed(4) || 0,
+class Input extends React.PureComponent {
+  static propTypes = {
+    dash: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.string,
+    ]).isRequired,
+    onChange: PropTypes.func,
+    placeholder: PropTypes.string,
+    placeholderTwo: PropTypes.string,
+    dashToUSD: PropTypes.string,
   }
-  handleChange(input, value) {
-    if (input === 'dash') {
-      this.setState({ dash: value })
-      this.setState({ usd: (value * this.props.dashToUSD).toFixed(4) })
-    } else {
-      this.setState({ usd: value })
-      this.setState({ dash: (value / this.props.dashToUSD).toFixed(4) })
-    }
+
+  getDashFromUSD(usd) {
+    return usd ? (usd / this.props.dashToUSD).toFixed(4) : 0
   }
+
+  getUSDFromDash(dash) {
+    return dash ? (dash * this.props.dashToUSD).toFixed(4) : 0
+  }
+
+  handleChange = (input, value) => {
+    const updates = input === 'dash'
+      ? { dash: value, usd: this.getUSDFromDash(value), updatingUSD: false }
+      : { usd: value, dash: this.getDashFromUSD(value), updatingUSD: true }
+    this.props.onChange(updates)
+  }
+
   render() {
+    const {
+      dash,
+      usd,
+      type,
+      label,
+      placeholder,
+      placeholderTwo,
+      updatingUSD,
+    } = this.props
+
+    const dashValue = !updatingUSD ? dash : this.getDashFromUSD(usd)
+    const usdValue = updatingUSD ? usd : this.getUSDFromDash(dash)
+    console.log(updatingUSD, dashValue, usdValue)
     return (
       <div className={s.root}>
         <label className={s.label}>
-          {this.props.label}
+          {label}
           <div>
             <div className={s.left}>
               <input
-                type={this.props.type || 'text'}
+                type={type || 'text'}
                 className={s.input}
-                placeholder={this.props.placeholder}
-                value={this.state.dash}
+                placeholder={placeholder}
+                value={dashValue}
                 onChange={e => this.handleChange('dash', e.target.value)}
               />
               <div className={s.unit}>DASH</div>
             </div>
             <div className={s.right}>
               <input
-                type={this.props.type || 'text'}
+                type={type || 'text'}
                 className={s.input}
-                placeholder={this.props.placeholderTwo}
-                value={this.state.usd}
+                placeholder={placeholderTwo}
+                value={usdValue}
                 onChange={e => this.handleChange('usd', e.target.value)}
               />
               <div className={s.unit}>USD</div>

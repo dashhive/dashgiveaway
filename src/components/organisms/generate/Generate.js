@@ -1,5 +1,5 @@
-import React from 'react'
-import bitcore from 'bitcore-lib-dash'
+import React, { Fragment } from 'react'
+import Bitcore from 'bitcore-lib-dash'
 import { Portal } from 'react-portal'
 import { QRCode } from 'react-qr-svg'
 import Button from '../../atoms/button/Button'
@@ -21,62 +21,100 @@ class Generate extends React.Component {
     feeUSD: '0.17',
     totalDash: '1.0004',
     totalUSD: '441.50',
-    minTransactionFee: 1000, // 1000 // 0 seems to give the "insufficient priority" error
-    transactionFee: 1000, // 1000 // 0 seems to give the "insufficient priority" error
-    walletAmount: 1000000,
+    minTransactionFee: 1000, // 0 seems to give the "insufficient priority" error
+    transactionFee: 1000, // 0 seems to give the "insufficient priority" error
     serialize: { disableDustOutputs: true, disableSmallFees: true },
     dashMultiple: 1000000,
     SATOSHIS_PER_DASH: 100000000,
     outputsPerTransaction: 1000, // theroetically 1900 (100kb transaction),
     reclaimDirty: true,
     UTXO_BATCH_MAX: 40, //100
-    transactionCount: 0,
+    updatingUSD: false,
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.data !== this.state.data) {
+      this.setState({
+        transactionFee: this.estimateFee(this.state.data),
+        fundingKeyPublic: this.state.data.fundingKeyPublic,
+      })
+    }
+  }
+
+  getWallets() {
+    const wallets = []
+
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const key = localStorage.key(i)
+      if (!/^dash:/.test(key)) {
+        continue
+      }
+
+      const item = localStorage.getItem(key)
+      const dashKey = key.replace(/^dash:/, '')
+      let keypair
+
+      try {
+        keypair = JSON.parse(item)
+        if (!isNaN(keypair)) {
+          keypair = { amount: keypair }
+        }
+      } catch (e) {
+        keypair = { amount: parseInt(item, 10) || 0 }
+      }
+
+      if (!keypair || !keypair.publicKey) {
+        keypair = window.DashDrop.create()._keyToKeypair(dashKey, keypair)
+      }
+
+      if (!keypair) {
+        console.warn('Not a valid cached key:', dashKey, item)
+        continue
+        //return;
+      }
+
+      wallets.push(keypair)
+    }
+
+    return wallets
   }
 
   generateWallets() {
     console.log('generateWallets:')
-    let data = []
-    data.keypairs = this._getWallets().filter(function(keypair) {
-      if (keypair.privateKey && !keypair.amount) {
-        return true
-      }
-    })
-    const walletQuantity = parseInt(this.state.walletQuantity, 10)
-    var i
-    var bitkey
+    const { walletQuantity } = this.state
+    const data = {
+      keypairs: this.getWallets()
+        .filter(({ privateKey, amount }) => privateKey && !amount),
+    }
 
     //data.privateKeys
-    for (i = data.keypairs.length; i < walletQuantity; i += 1) {
-      bitkey = new bitcore.PrivateKey()
+    for (let i = data.keypairs.length; i < walletQuantity; i++) {
+      const bitKey = new Bitcore.PrivateKey()
       data.keypairs.push({
-        privateKey: bitkey.toWIF(),
-        publicKey: bitkey.toAddress().toString(),
+        privateKey: bitKey.toWIF(),
+        publicKey: bitKey.toAddress().toString(),
         amount: 0,
       })
     }
     data.keypairs = data.keypairs.slice(0, walletQuantity)
-    var csv = window.DashDrop.create()._toCsv(data.keypairs)
-    console.log(csv)
-    this.setState({ csv })
+    const csv = window.DashDrop.create()._toCsv(data.keypairs)
     // data.csv = DashDom._toCsv(csv)
 
-    const transactionFee = this.estimateFee(data)
-    this.setState({ transactionFee })
-    console.log(transactionFee)
-    this.updateTransactionTotal(data)
+    this.setState({ data, csv })
     // view.csv.show()
   }
 
   estimateFee(data) {
-    var bitkey = new bitcore.PrivateKey()
-    var txOpts = {
+    // create new private key
+    const bitkey = new Bitcore.PrivateKey()
+    const txOpts = {
+      // converts to wallet format
       src: bitkey.toWIF(),
-      dsts: data.keypairs.map(function(kp) {
-        return kp.publicKey
-      }),
+      // distribute to all provided keys
+      dsts: data.keypairs.map(kp => kp.publicKey),
       amount: this.state.walletQuantity,
-      // some made-up address with infinite money
       utxos: data.fundingUtxos || [
+        // some made-up address with infinite money
         {
           address: 'XwZ3CBB97JnyYi17tQdzFDhZJYCenwtMU8',
           txid: 'af37fad079c34a8ac62a32496485f2f8815ddd8fd1d5ffec84f820a91d82a7fc',
@@ -89,84 +127,20 @@ class Generate extends React.Component {
         },
       ],
     }
-    return window.DashDrop.create().estimateFee(txOpts)
+    return window.DashDrop.create().estimateFee(txOpts) / this.state.SATOSHIS_PER_DASH
   }
 
-  updateTransactionTotal(data) {
-    console.log('update transaction total', this.state.walletQuantity)
-    // TODO you can only have one transaction per UTXO
-    const transactionCount = Math.ceil(
-      this.state.walletQuantity / this.state.outputsPerTransaction,
-    )
-    this.setState({ transactionCount })
-    const estimatedTransactionFee = this.estimateFee(data)
-    this.setState({ estimatedTransactionFee })
-    const transactionTotal =
-      this.state.transactionCount * this.state.transactionFee +
-      this.state.walletAmount * this.state.walletQuantity
-
-    this.setState({ transactionTotal })
-    // $('input.js-transaction-fee-dash').val(DashDrop.toDash(config.transactionFee))
-    // $('span.js-transaction-fee-dash').text(DashDrop.toDash(config.transactionFee))
-    // $('input.js-transaction-fee-usd').val(DashDrop.toUsd(config.transactionFee))
-    // $('span.js-transaction-fee-usd').text(DashDrop.toUsd(config.transactionFee))
-    // $('.js-transaction-count').val(config.transactionCount)
-    // $('.js-transaction-count').text(config.transactionCount)
-    // $('input.js-transaction-total').val(DashDrop.toDash(config.transactionTotal))
-    // $('span.js-transaction-total').text(DashDrop.toDash(config.transactionTotal))
-    // $('input.js-transaction-total-usd').val(DashDrop.toUsd(config.transactionTotal))
-    // $('span.js-transaction-total-usd').text(DashDrop.toUsd(config.transactionTotal))
-    // if (data.fundingKey && config.transactionTotal <= data.fundingTotal) {
-    //   $('.js-transaction-commit-error').addClass('hidden')
-    //   $('button.js-transaction-commit').prop('disabled', false)
-    // } else {
-    //   $('.js-transaction-commit-error').removeClass('hidden')
-    //   $('button.js-transaction-commit').prop('disabled', true)
-    // }
-    // DashDom._updateFundingQr(data.fundingKeyPublic)
-    this.setState({ fundingKeyPublic: data.fundingKeyPublic })
-  }
-
-  _getWallets() {
-    var i
-    var len = localStorage.length
-    var key
-    var wallets = []
-    var dashkey
-    var keypair
-
-    for (i = 0; i < len; i += 1) {
-      key = localStorage.key(i)
-      if (!/^dash:/.test(key)) {
-        continue
-        //return;
-      }
-
-      try {
-        keypair = JSON.parse(localStorage.getItem(key))
-        if (!isNaN(keypair)) {
-          keypair = { amount: keypair }
-        }
-      } catch (e) {
-        keypair = { amount: parseInt(localStorage.getItem(key), 10) || 0 }
-      }
-
-      dashkey = key.replace(/^dash:/, '')
-
-      if (!keypair || !keypair.publicKey) {
-        keypair = window.DashDrop.create()._keyToKeypair(dashkey, keypair)
-      }
-
-      if (!keypair) {
-        console.warn('Not a valid cached key:', dashkey, localStorage.getItem(key))
-        continue
-        //return;
-      }
-
-      wallets.push(keypair)
-    }
-
-    return wallets
+  getTransactionTotal() {
+    const {
+      walletQuantity,
+      outputsPerTransaction,
+      transactionFee,
+      amountDash,
+    } = this.state
+    const transactionCount = Math.ceil(walletQuantity / outputsPerTransaction)
+    const transactionTotal = transactionCount * transactionFee
+    const dashTotal = amountDash * walletQuantity
+    return transactionTotal + dashTotal
   }
 
   downloadCsv(csv) {
@@ -177,29 +151,20 @@ class Generate extends React.Component {
     hiddenElement.click()
   }
 
-  _parseFileCsv(file, cb) {
-    const reader = new FileReader()
-    reader.addEventListener('error', () => {
-      window.alert('Error parsing CSV')
+  _parseFileCsv(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader()
+      reader.addEventListener('error', reject)
+      reader.addEventListener('load', e => resolve(e.target.result))
+      reader.readAsText(file)
     })
-    reader.addEventListener('load', ev => {
-      const csv = ev.target.result
-      // $('.js-paper-wallet-keys').val(data.csv);
-      console.log('data.csv:')
-      console.log(csv)
-      // DashDom._updateWalletCsv($('.js-paper-wallet-keys'));
-      // console.log('data.keypairs:')
-      // console.log(data.keypairs)
-      cb(csv)
-    })
-    reader.readAsText(file)
   }
 
   importFileCsv(file) {
-    console.log(file)
-    this._parseFileCsv(file, csv => {
-      this.setState({ csv })
-    })
+    this._parseFileCsv(file)
+      .then(csv => {
+        this.setState({ csv })
+      })
   }
 
   pasteCsv() {
@@ -224,7 +189,28 @@ class Generate extends React.Component {
     this.setState({ [input]: value })
   }
 
+  handleDashChange = value => {
+    this.setState({
+      amountDash: value.dash,
+      amountUSD: value.usd,
+      updatingUSD: value.updatingUSD,
+    })
+  }
+
+  handleTransactionChange = value => {
+    this.setState({
+      transactionFee: value.dash,
+    })
+  }
+
+  persistWallets() {
+
+  }
+
   render() {
+    const transactionTotal = this.getTransactionTotal()
+    const { transactionFee, amountDash } = this.state
+    console.log(transactionTotal)
     return (
       <Card className={s.root} title="Import existing wallets or generate new ones">
         <div className={s.wrapper}>
@@ -266,62 +252,65 @@ class Generate extends React.Component {
             </Button>
           </div>
         </div>
-        <div className={s.textarea}>
-          {this.state.csv && (
-            <textarea
-              value={this.state.csv}
-              onChange={e => this.handleChange('csv', e.target.value)}
-            />
-          )}
-        </div>
         {this.state.csv && (
-          <div className={s.save}>
-            <Portal>
-              <div className="dd-print-only">{this.state.csv}</div>
-            </Portal>
-            <div>
-              <span className={s.warning}>Save CSV file before proceeding</span>
-              <p>
-                If you lose this file, all the money you put into these wallets will be
-                lost!
-              </p>
+          <Fragment>
+            <div className={s.textarea}>
+              <textarea
+                value={this.state.csv}
+                onChange={e => this.handleChange('csv', e.target.value)}
+              />
             </div>
-            <div className={s.saveActions}>
+            <div className={s.save}>
+              <Portal>
+                <div className="dd-print-only">{this.state.csv}</div>
+              </Portal>
               <div>
-                <Button primary onClick={() => window.print()}>
-                  Print
-                </Button>
+                <span className={s.warning}>Save CSV file before proceeding</span>
+                <p>
+                  If you lose this file, all the money you put into these wallets will be
+                  lost!
+                </p>
               </div>
-              <div>
-                <Button primary onClick={() => this.downloadCsv(this.state.csv)}>
-                  Download&nbsp;.csv
-                </Button>
+              <div className={s.saveActions}>
+                <div>
+                  <Button primary onClick={() => window.print()}>
+                    Print
+                  </Button>
+                </div>
+                <div>
+                  <Button primary onClick={() => this.downloadCsv(this.state.csv)}>
+                    Download&nbsp;.csv
+                  </Button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        {this.state.csv && (
-          <div className={s.inputsRow}>
-            <InputPair label="Amount per Wallet" dash={this.state.amountDash}/>
-            <InputPair
-              label="Per Transaction Fee"
-              dash={this.state.transactionFee / this.state.SATOSHIS_PER_DASH}
+            <div className={s.inputsRow}>
+              <InputPair
+                label="Amount per Wallet"
+                dash={this.state.amountDash}
+                usd={this.state.amountUSD}
+                updatingUSD={this.state.updatingUSD}
+                onChange={this.handleDashChange}
+              />
+              <InputPair
+                label="Per Transaction Fee"
+                dash={this.state.transactionFee.toFixed(4)}
+                onChange={this.handleTransactionChange}
+              />
+              <InputPair
+                label="Total"
+                dash={transactionTotal.toFixed(4)}
+              />
+            </div>
+            <QRCode
+              style={{ width: 256 }}
+              bgColor="#CCFFFF"
+              value={`dash:${
+                this.state.fundingKeyPublic
+                }?amount=${window.DashDrop.create().toDash(transactionTotal) ||
+              0}`}
             />
-            <InputPair
-              label="Total"
-              dash={this.state.transactionTotal / this.state.SATOSHIS_PER_DASH}
-            />
-          </div>
-        )}
-        {this.state.csv && (
-          <QRCode
-            style={{ width: 256 }}
-            bgColor="#CCFFFF"
-            value={`dash:${
-              this.state.fundingKeyPublic
-              }?amount=${window.DashDrop.create().toDash(this.state.transactionTotal) ||
-            0}`}
-          />
+          </Fragment>
         )}
       </Card>
     )

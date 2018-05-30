@@ -58,7 +58,7 @@
     }
     DashDrop._privateToPublic = sk => new bitcore.PrivateKey(sk).toAddress().toString()
     DashDrop._keypairToPublicKey = (
-      { publicKey }, //new bitcore.PrivateKey(sk).toAddress().toString();
+      { publicKey }, //new Bitcore.PrivateKey(sk).toAddress().toString();
     ) => publicKey
     // opts = { utxo, src, dsts, amount, fee }
     DashDrop.estimateFee = opts => {

@@ -69,7 +69,8 @@
     "whatwg-fetch": "2.0.3"
   },
   "devDependencies": {
-    "prettier": "1.12.1"
+    "prettier": "1.12.1",
+    "prop-types": "^15.6.1"
   },
   "jest": {
     "collectCoverageFrom": [
