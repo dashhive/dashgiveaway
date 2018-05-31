@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { connect } from 'react-redux'
-import { dashToUSDSelector } from 'store/dashToUSD'
 import s from './InputPair.css'
+import { withDashToUSD } from '../../../store/dash-to-usd/context'
 
 class Input extends React.PureComponent {
   static propTypes = {
@@ -77,4 +76,4 @@ class Input extends React.PureComponent {
   }
 }
 
-export default connect(state => ({ dashToUSD: dashToUSDSelector(state) }))(Input)
+export default withDashToUSD(Input)

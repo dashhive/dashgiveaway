@@ -1,13 +1,8 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { dashToUSDSelector, getDashToUSD } from 'store/dashToUSD'
 import Button from '../../atoms/button/Button'
 import s from './Header.css'
-class Header extends React.Component {
-  componentDidMount() {
-    this.props.getDashToUSD()
-  }
 
+export default class Header extends React.Component {
   render() {
     return (
       <header className={s.root}>
@@ -44,9 +39,3 @@ class Header extends React.Component {
     )
   }
 }
-
-const mapState = state => ({
-  currency: dashToUSDSelector(state),
-})
-
-export default connect(mapState, { getDashToUSD })(Header)

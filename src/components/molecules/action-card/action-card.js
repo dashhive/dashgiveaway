@@ -9,8 +9,8 @@ export default function({ title, description, banners, buttonText }) {
     <Card title={title} className={style.card__action}>
       <p className={style.card__action__p}>{description}</p>
       <div className={style.icons}>
-        {banners.map(({ src, alt, title }) => (
-          <MiniBanner src={`/img/${src}`} alt={alt} title={title} />
+        {banners.map(({ src, alt, title }, index) => (
+          <MiniBanner key={index} src={`/img/${src}`} alt={alt} title={title}/>
         ))}
       </div>
       <Button primary>{buttonText}</Button>

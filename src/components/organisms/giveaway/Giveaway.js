@@ -1,5 +1,4 @@
 import React from 'react'
-import Button from '../../atoms/button/Button'
 import Generate from '../generate/Generate'
 import ActionCard from '../../molecules/action-card/action-card'
 import APICard from '../../molecules/api-card/api-card'
@@ -62,16 +61,23 @@ class Giveaway extends React.Component {
         >
           <p>
             Want to run a private instance of this app? Install{' '}
-            <a href="https://github.com/dashhive/dashd-installer.sh" target="_blank">
+            <a href="https://github.com/dashhive/dashd-installer.sh"
+               target="_blank"
+               rel="noopener noreferrer"
+            >
               dashd
             </a>, the{' '}
             <a
               href="https://github.com/dashhive/dash-insight-installer.sh"
               target="_blank"
+              rel="noopener noreferrer"
             >
               Dash Insight API
             </a>, and host{' '}
-            <a href="https://github.com/dashhive/dashdrop.html" target="_blank">
+            <a href="https://github.com/dashhive/dashdrop.html"
+               target="_blank"
+               rel="noopener noreferrer"
+            >
               DashDrop
             </a>.
           </p>

@@ -209,8 +209,6 @@ class Generate extends React.Component {
 
   render() {
     const transactionTotal = this.getTransactionTotal()
-    const { transactionFee, amountDash } = this.state
-    console.log(transactionTotal)
     return (
       <Card className={s.root} title="Import existing wallets or generate new ones">
         <div className={s.wrapper}>
@@ -218,7 +216,7 @@ class Generate extends React.Component {
             <h4>Import Existing</h4>
             <p>Upload or paste CSV file to import an existing batch of wallets</p>
             <div className={s.dropzone} style={{ display: 'none' }}>
-              <img src="/img/icon-upload-arrow.svg"/>
+              <img src="/img/icon-upload-arrow.svg" alt='upload'/>
             </div>
             <div className={s.importButtons}>
               <Button primary onClick={() => this.pasteCsv()}>
