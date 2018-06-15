@@ -1,8 +1,8 @@
 import React from 'react'
-import Generate from '../generate/Generate'
 import ActionCard from '../../molecules/action-card/action-card'
 import APICard from '../../molecules/api-card/api-card'
 import s from './Giveaway.css'
+import Link from 'react-router-dom/es/Link'
 
 class Giveaway extends React.Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class Giveaway extends React.Component {
                 title: 'Import Paper CSV',
               },
             ]}
-            buttonText="Spread Dash →"
+            buttonText={(<Link to='/spread'>{'Spread Dash →'}</Link>)}
           />
           <ActionCard
             title="Review Giveaway"
@@ -82,7 +82,6 @@ class Giveaway extends React.Component {
             </a>.
           </p>
         </APICard>
-        <Generate/>
       </div>
     )
   }

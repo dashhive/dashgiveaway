@@ -24,6 +24,7 @@ class Input extends React.PureComponent {
   }
 
   handleChange = (input, value) => {
+    console.log(value)
     const updates = input === 'dash'
       ? { dash: value, usd: this.getUSDFromDash(value), updatingUSD: false }
       : { usd: value, dash: this.getDashFromUSD(value), updatingUSD: true }
@@ -39,7 +40,9 @@ class Input extends React.PureComponent {
       placeholder,
       placeholderTwo,
       updatingUSD,
+      disabled,
     } = this.props
+    console.log(this.props)
 
     const dashValue = !updatingUSD ? dash : this.getDashFromUSD(usd)
     const usdValue = updatingUSD ? usd : this.getUSDFromDash(dash)
@@ -56,6 +59,7 @@ class Input extends React.PureComponent {
                 placeholder={placeholder}
                 value={dashValue}
                 onChange={e => this.handleChange('dash', e.target.value)}
+                disabled={disabled}
               />
               <div className={s.unit}>DASH</div>
             </div>
@@ -66,6 +70,7 @@ class Input extends React.PureComponent {
                 placeholder={placeholderTwo}
                 value={usdValue}
                 onChange={e => this.handleChange('usd', e.target.value)}
+                disabled={disabled}
               />
               <div className={s.unit}>USD</div>
             </div>

@@ -15,130 +15,89 @@ class Generate extends React.Component {
     transactionTotal: 0,
     fundingTotal: 0,
     fundingKeyPublic: 0,
-    amountDash: '0.01',
-    amountUSD: '4.41',
-    feeDash: '0.0004',
-    feeUSD: '0.17',
-    totalDash: '1.0004',
-    totalUSD: '441.50',
+    amountDash: 0.01,
+    amountUSD: 4.41,
+    feeDash: 0.00001,
+    feeUSD: 0,
     minTransactionFee: 1000, // 0 seems to give the "insufficient priority" error
     transactionFee: 1000, // 0 seems to give the "insufficient priority" error
-    serialize: { disableDustOutputs: true, disableSmallFees: true },
-    dashMultiple: 1000000,
+    // serialize: { disableDustOutputs: true, disableSmallFees: true },
+    // dashMultiple: 1000000,
     SATOSHIS_PER_DASH: 100000000,
     outputsPerTransaction: 1000, // theroetically 1900 (100kb transaction),
-    reclaimDirty: true,
+    // reclaimDirty: true,
     UTXO_BATCH_MAX: 40, //100
-    updatingUSD: false,
+    updatingFeeUSD: false,
+    updateAmountUSD: false,
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.data !== this.state.data) {
-      this.setState({
-        transactionFee: this.estimateFee(this.state.data),
-        fundingKeyPublic: this.state.data.fundingKeyPublic,
-      })
-    }
+  componentDidUpdate() {
+    this.persistWallets()
   }
 
   getWallets() {
-    const wallets = []
-
-    for (let i = 0; i < localStorage.length; i += 1) {
-      const key = localStorage.key(i)
-      if (!/^dash:/.test(key)) {
-        continue
-      }
-
-      const item = localStorage.getItem(key)
-      const dashKey = key.replace(/^dash:/, '')
-      let keypair
-
-      try {
-        keypair = JSON.parse(item)
-        if (!isNaN(keypair)) {
-          keypair = { amount: keypair }
-        }
-      } catch (e) {
-        keypair = { amount: parseInt(item, 10) || 0 }
-      }
-
-      if (!keypair || !keypair.publicKey) {
-        keypair = window.DashDrop.create()._keyToKeypair(dashKey, keypair)
-      }
-
-      if (!keypair) {
-        console.warn('Not a valid cached key:', dashKey, item)
-        continue
-        //return;
-      }
-
-      wallets.push(keypair)
-    }
-
-    return wallets
+    return JSON.parse(window.localStorage.getItem('wallets')) || {}
   }
 
   generateWallets() {
     console.log('generateWallets:')
-    const { walletQuantity } = this.state
-    const data = {
-      keypairs: this.getWallets()
-        .filter(({ privateKey, amount }) => privateKey && !amount),
-    }
 
-    //data.privateKeys
-    for (let i = data.keypairs.length; i < walletQuantity; i++) {
+    const walletQuantity = parseInt(this.state.walletQuantity) || 1
+    const wallets = new Array(walletQuantity).fill(null).map(() => {
       const bitKey = new Bitcore.PrivateKey()
-      data.keypairs.push({
+      return {
         privateKey: bitKey.toWIF(),
         publicKey: bitKey.toAddress().toString(),
         amount: 0,
-      })
-    }
-    data.keypairs = data.keypairs.slice(0, walletQuantity)
-    const csv = window.DashDrop.create()._toCsv(data.keypairs)
-    // data.csv = DashDom._toCsv(csv)
+        created: Date.now(),
+      }
+    })
+    console.log(wallets)
 
-    this.setState({ data, csv })
-    // view.csv.show()
+    this.setState({ wallets, csv: this.getWalletCSV(wallets) })
   }
 
-  estimateFee(data) {
-    // create new private key
-    const bitkey = new Bitcore.PrivateKey()
-    const txOpts = {
-      // converts to wallet format
-      src: bitkey.toWIF(),
-      // distribute to all provided keys
-      dsts: data.keypairs.map(kp => kp.publicKey),
-      amount: this.state.walletQuantity,
-      utxos: data.fundingUtxos || [
-        // some made-up address with infinite money
-        {
-          address: 'XwZ3CBB97JnyYi17tQdzFDhZJYCenwtMU8',
-          txid: 'af37fad079c34a8ac62a32496485f2f8815ddd8fd1d5ffec84f820a91d82a7fc',
-          vout: 2,
-          scriptPubKey: '76a914e4e0cc1758622358f04c7d4d6894201c7ca3a44788ac',
-          amount: 8601,
-          satoshis: 860100000000,
-          height: 791049,
-          confirmations: 6,
-        },
-      ],
-    }
-    return window.DashDrop.create().estimateFee(txOpts) / this.state.SATOSHIS_PER_DASH
+  getWalletCSV(wallets = this.state.wallets) {
+    return wallets
+      .map(({ publicKey, privateKey, amount }, i) => `${i + 1},${publicKey},${privateKey},${amount}`)
+      .join('\n')
   }
 
-  getTransactionTotal() {
-    const {
-      walletQuantity,
-      outputsPerTransaction,
-      transactionFee,
-      amountDash,
-    } = this.state
+  // estimateFee(wallets = this.state.wallets) {
+  //   const transaction = new bitcore.Transaction()
+  //
+  //   wallets.forEach(({publicKey}) => {
+  //     transaction.to(new Bitcore.Address(publicKey), this.state.walletQuantity)
+  //   })
+  //   transaction.change(new bitcore.PrivateKey().toAddress())
+  //   const fundingWallet = this.state.fundingUtxos || [
+  //     // some made-up address with infinite money
+  //     {
+  //       address: 'XwZ3CBB97JnyYi17tQdzFDhZJYCenwtMU8',
+  //       txid: 'af37fad079c34a8ac62a32496485f2f8815ddd8fd1d5ffec84f820a91d82a7fc',
+  //       vout: 2,
+  //       scriptPubKey: '76a914e4e0cc1758622358f04c7d4d6894201c7ca3a44788ac',
+  //       amount: 8601,
+  //       satoshis: 860100000000,
+  //       height: 791049,
+  //       confirmations: 6,
+  //     },
+  //   ]
+  //   opts.utxos.forEach(utxo => {
+  //     transaction.from(utxo)
+  //   })
+  //
+  //   return transaction.getFee() / this.state.SATOSHIS_PER_DASH
+  // }
+
+  getTransactionTotal({
+                        walletQuantity,
+                        outputsPerTransaction,
+                        feeDash,
+                        amountDash,
+                      } = this.state) {
     const transactionCount = Math.ceil(walletQuantity / outputsPerTransaction)
-    const transactionTotal = transactionCount * transactionFee
+    const transactionTotal = transactionCount * feeDash
     const dashTotal = amountDash * walletQuantity
     return transactionTotal + dashTotal
   }
@@ -189,26 +148,148 @@ class Generate extends React.Component {
     this.setState({ [input]: value })
   }
 
-  handleDashChange = value => {
+  handleAmountChange = value => {
+    console.log(value)
     this.setState({
       amountDash: value.dash,
       amountUSD: value.usd,
-      updatingUSD: value.updatingUSD,
+      updatingAmountUSD: value.updatingUSD,
     })
   }
 
   handleTransactionChange = value => {
     this.setState({
-      transactionFee: value.dash,
+      feeDash: value.dash,
+      feeUSD: value.usd,
+      updatingFeeUSD: value.updatingUSD,
     })
   }
 
-  persistWallets() {
+  // disburse({ dsts, amount, src, utxos, fee }) {
+  //   const transaction = new Bitcore.Transaction()
+  //   transaction.change(new Bitcore.PrivateKey(src).toAddress())
+  //
+  //   dsts.forEach(publicKey => transaction.to(new Bitcore.Address(publicKey), amount))
+  //   utxos.forEach(utxo => transaction.from(utxo))
+  //
+  //   if ('number' === typeof fee && !isNaN(fee)) {
+  //     transaction.fee(fee)
+  //   }
+  //   return transaction
+  //     .sign(new Bitcore.PrivateKey(src))
+  //     .serialize({ disableDustOutputs: true, disableSmallFees: true })
+  // }
 
+  // /*getPrivateKeyFromPublic = key => new bitcore.PrivateKey(key).toAddress().toString()
+  //
+  // getKeyPairFromKey(key, obj = {}) {
+  //   if (34 === key.length) {
+  //     obj.publicKey = key
+  //   } else if (52 === key.length || 51 === key.length) {
+  //     obj.privateKey = key
+  //     obj.publicKey = DashDrop._privateToPublic(key)
+  //   } else {
+  //     return null
+  //   }
+  //
+  //   return obj
+  // }*/
+
+  // async commitDisbursement(data) {
+  //   const { wallets, outputsPerTransaction } = this.state
+  //   const results = {
+  //     error: false,
+  //     results: [],
+  //   }
+  //   // The logic here is built such that multiple funding private keys could be used in the future
+  //   const fundingKeypair = this.getKeyPairFromKey(data.fundingKey)
+  //   if (!data.fundingKey || !fundingKeypair.privateKey) {
+  //     throw new Error(
+  //       'Please choose a Private Key with sufficient funds as a funding source.',
+  //     )
+  //   }
+  //
+  //   const transactions = new Array(wallets.length / outputsPerTransaction)
+  //     .fill(undefined)
+  //     .map((value, i) => wallets.slice(i * outputsPerTransaction), (i + 1) * outputsPerTransaction)
+  //
+  //   for (const i in transactions) {
+  //     results.results[i] = await this.sendDisbursement(transactions[i])
+  //   }
+  //
+  //   return results
+  // }
+
+  // async sendDisbursement(wallets) {
+  //   if (!wallets || !wallets.length) {
+  //     return Promise.reject('No wallets provided')
+  //   }
+  //
+  //   const transactions = this.disburse({
+  //     utxos: data.fundingUtxos,
+  //     src: data.fundingKey,
+  //     dsts: wallets.map(({ publicKey }) => publicKey).filter(Boolean),
+  //     amount: config.walletAmount,
+  //     fee: config.transactionFee || undefined,
+  //   })
+  //   console.log('transaction: ', transactions)
+  //
+  //   const url = `${config.insightBaseUrl}/tx/send`
+  //   const headers = {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify({ rawtx: transactions }),
+  //   }
+  //
+  //   try {
+  //     const response = await window.fetch(url, headers)
+  //     const results = await response.json()
+  //     console.log('results: ', results)
+  //
+  //     this.setState(prevState = ({
+  //       wallets: prevState.wallets.map(wallet => ({
+  //         ...wallet,
+  //         updated: Date.now(),
+  //       })),
+  //     }))
+  //
+  //     return results
+  //   } catch (e) {
+  //     console.error('Disburse Commit Transaction Error:', err)
+  //     throw err
+  //   }
+  // }
+
+  persistWallets() {
+    const savedWallets = JSON.parse(window.localStorage.getItem('wallets')) || {}
+    console.log(savedWallets)
+
+    const wallets = this.state.wallets.reduce((prev, wallet) => {
+      return Object.assign(prev, {
+        [wallet.publicKey]: {
+          saved: Date.now(),
+          ...wallet,
+        },
+      })
+    })
+    const newWallets = Object.assign({}, savedWallets, wallets)
+    window.localStorage.setItem('wallets', JSON.stringify(newWallets))
+
+
+    const savedTransactions = JSON.parse(window.localStorage.getItem('transactions')) || []
+
+    const transactions = [
+      Object.keys(wallets),
+      ...savedTransactions.slice(9),
+    ]
+    window.localStorage.setItem('transactions', JSON.stringify(transactions))
+
+    return newWallets
   }
 
   render() {
     const transactionTotal = this.getTransactionTotal()
+    console.log(this.state)
     return (
       <Card className={s.root} title="Import existing wallets or generate new ones">
         <div className={s.wrapper}>
@@ -287,17 +368,20 @@ class Generate extends React.Component {
                 label="Amount per Wallet"
                 dash={this.state.amountDash}
                 usd={this.state.amountUSD}
-                updatingUSD={this.state.updatingUSD}
-                onChange={this.handleDashChange}
+                updatingUSD={this.state.updatingAmountUSD}
+                onChange={this.handleAmountChange}
               />
               <InputPair
                 label="Per Transaction Fee"
-                dash={this.state.transactionFee.toFixed(4)}
+                dash={this.state.feeDash}
+                usd={this.state.feeUSD}
+                updatingUSD={this.state.updatingFeeUSD}
                 onChange={this.handleTransactionChange}
               />
               <InputPair
                 label="Total"
-                dash={transactionTotal.toFixed(4)}
+                dash={transactionTotal.toFixed(5)}
+                disabled={true}
               />
             </div>
             <QRCode

@@ -2,6 +2,7 @@
   display: flex;
   justify-content: center;
   flex-direction: column;
+  max-width: 900px;
   width: 100%;
   margin: 5em auto 2em;
   color: #8ca2b5;
