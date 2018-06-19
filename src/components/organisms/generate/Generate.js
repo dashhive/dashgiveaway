@@ -29,6 +29,7 @@ class Generate extends React.Component {
     UTXO_BATCH_MAX: 40, //100
     updatingFeeUSD: false,
     updateAmountUSD: false,
+    wallets: [],
   }
 
   componentDidUpdate() {
@@ -262,7 +263,6 @@ class Generate extends React.Component {
 
   persistWallets() {
     const savedWallets = JSON.parse(window.localStorage.getItem('wallets')) || {}
-    console.log(savedWallets)
 
     const wallets = this.state.wallets.reduce((prev, wallet) => {
       return Object.assign(prev, {
@@ -271,7 +271,7 @@ class Generate extends React.Component {
           ...wallet,
         },
       })
-    })
+    }, {})
     const newWallets = Object.assign({}, savedWallets, wallets)
     window.localStorage.setItem('wallets', JSON.stringify(newWallets))
 
