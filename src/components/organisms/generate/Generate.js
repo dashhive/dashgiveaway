@@ -131,20 +131,6 @@ class Generate extends React.Component {
     this.setState({ csv: ' ' })
   }
 
-  // _updateFundingQr(fundingKeyPublic) {
-  //   console.log('fundingTotal:', this.state.fundingTotal)
-  //   var qrPublic = new QRCode({
-  //     element: document.querySelector('.js-funding-qr-public'),
-  //     value:
-  //       'dash:' +
-  //       fundingKeyPublic +
-  //       '?amount=' +
-  //       (window.DashDrop.create().toDash(this.state.transactionTotal) || 0),
-  //     size: 256,
-  //     background: '#CCFFFF',
-  //   })
-  // }
-
   handleChange(input, value) {
     this.setState({ [input]: value })
   }
@@ -387,10 +373,7 @@ class Generate extends React.Component {
             <QRCode
               style={{ width: 256 }}
               bgColor="#CCFFFF"
-              value={`dash:${
-                this.state.fundingKeyPublic
-                }?amount=${window.DashDrop.create().toDash(transactionTotal) ||
-              0}`}
+              value={`dash:${this.state.fundingKeyPublic}?amount=${transactionTotal}`}
             />
           </Fragment>
         )}
