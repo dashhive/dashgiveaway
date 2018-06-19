@@ -1,8 +1,9 @@
 import React from 'react'
 import Button from '../../atoms/button/Button'
 import s from './Header.css'
+import { withDashToUSD } from '../../../store/dash-to-usd/context'
 
-export default class Header extends React.Component {
+export class Header extends React.Component {
   render() {
     return (
       <header className={s.root}>
@@ -10,7 +11,7 @@ export default class Header extends React.Component {
           <div className={s.logo}>
             <img src="/img/logo.png" alt="" />
           </div>
-          <h2>1 DASH = {this.props.currency} USD</h2>
+          <h2>1 DASH = {this.props.dashToUSD} USD</h2>
           <div className={s.buttons}>
             <Button primary href="https://github.com/dashhive/dashdrop" target="_blank">
               View Code
@@ -39,3 +40,5 @@ export default class Header extends React.Component {
     )
   }
 }
+
+export default withDashToUSD(Header)
