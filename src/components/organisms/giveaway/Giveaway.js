@@ -57,7 +57,7 @@ class Giveaway extends React.Component {
         </div>
         <APICard
           title="Insight API URL"
-          placeholder="ex: https://api.example.com/insight-api-dash"
+          url="https://api.example.com/insight-api-dash"
         >
           <p>
             Want to run a private instance of this app? Install{' '}

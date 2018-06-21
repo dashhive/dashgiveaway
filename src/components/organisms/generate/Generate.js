@@ -6,7 +6,7 @@ import Button from '../../atoms/button/Button'
 import Input from '../../atoms/input/Input'
 import InputPair from '../input-pair/InputPair'
 import Card from '../../molecules/card/card'
-import s from './Generate.css'
+import style from './Generate.css'
 
 class Generate extends React.Component {
   state = {
@@ -14,7 +14,8 @@ class Generate extends React.Component {
     walletQuantity: 100,
     transactionTotal: 0,
     fundingTotal: 0,
-    fundingKeyPublic: 0,
+    sourcePublicKey: this.getStoredWallet('source').publicKey,
+    noFunds: false,
     amountDash: 0.01,
     amountUSD: 4.41,
     feeDash: 0.00001,
@@ -34,6 +35,32 @@ class Generate extends React.Component {
 
   componentDidUpdate() {
     this.persistWallets()
+  }
+
+  createStoredWallet(name) {
+    const key = new Bitcore.PrivateKey()
+    const address = {
+      publicKey: key.toAddress().toString(),
+      privateKey: key.toWIF(),
+      amount: 0,
+    }
+    window.localStorage.setItem(name, JSON.stringify(address))
+    return address
+  }
+
+  getStoredWallet(name) {
+    let address = JSON.parse(window.localStorage.getItem(name) || null)
+
+    if (address && address.privateKey) {
+      try {
+        new Bitcore.PrivateKey(address.privateKey)
+        return address
+      } catch (e) {
+        return this.createStoredWallet(name)
+      }
+    } else {
+      return this.createStoredWallet(name)
+    }
   }
 
   getWallets() {
@@ -274,18 +301,20 @@ class Generate extends React.Component {
   }
 
   render() {
+    const { noFunds, sourcePublicKey, walletQuantity, csv, amountDash, amountUSD, updatingAmountUSD, feeDash, feeUSD, updatingFeeUSD } = this.state
+    console.info(sourcePublicKey)
     const transactionTotal = this.getTransactionTotal()
     console.log(this.state)
     return (
-      <Card className={s.root} title="Import existing wallets or generate new ones">
-        <div className={s.wrapper}>
-          <div className={s.existing}>
+      <Card className={style.root} title="Import existing wallets or generate new ones">
+        <div className={style.wrapper}>
+          <div className={style.existing}>
             <h4>Import Existing</h4>
             <p>Upload or paste CSV file to import an existing batch of wallets</p>
-            <div className={s.dropzone} style={{ display: 'none' }}>
+            <div className={style.dropzone} style={{ display: 'none' }}>
               <img src="/img/icon-upload-arrow.svg" alt='upload'/>
             </div>
-            <div className={s.importButtons}>
+            <div className={style.importButtons}>
               <Button primary onClick={() => this.pasteCsv()}>
                 Paste CSV
               </Button>
@@ -293,22 +322,22 @@ class Generate extends React.Component {
             </div>
             <input
               type="file"
-              className={s.file}
+              className={style.file}
               onChange={e => this.importFileCsv(e.target.files[0])}
               accept="text/*"
             />
           </div>
 
-          <div className={s.or}>OR</div>
+          <div className={style.or}>OR</div>
 
-          <div className={s.new}>
+          <div className={style.new}>
             <h4>Generate New</h4>
             <p>Input how many new, empty wallets you'd like to generate.</p>
             <Input
               label="Number of wallets"
               type="number"
               placeholder="ex: 10"
-              value={this.state.walletQuantity}
+              value={walletQuantity}
               onChange={e => this.handleChange('walletQuantity', e.target.value)}
             />
 
@@ -317,51 +346,51 @@ class Generate extends React.Component {
             </Button>
           </div>
         </div>
-        {this.state.csv && (
+        {csv && (
           <Fragment>
-            <div className={s.textarea}>
+            <div className={style.textarea}>
               <textarea
-                value={this.state.csv}
+                value={csv}
                 onChange={e => this.handleChange('csv', e.target.value)}
               />
             </div>
-            <div className={s.save}>
+            <div className={style.save}>
               <Portal>
-                <div className="dd-print-only">{this.state.csv}</div>
+                <div className="dd-print-only">{csv}</div>
               </Portal>
               <div>
-                <span className={s.warning}>Save CSV file before proceeding</span>
+                <span className={style.warning}>Save CSV file before proceeding</span>
                 <p>
                   If you lose this file, all the money you put into these wallets will be
                   lost!
                 </p>
               </div>
-              <div className={s.saveActions}>
+              <div className={style.saveActions}>
                 <div>
                   <Button primary onClick={() => window.print()}>
                     Print
                   </Button>
                 </div>
                 <div>
-                  <Button primary onClick={() => this.downloadCsv(this.state.csv)}>
+                  <Button primary onClick={() => this.downloadCsv(csv)}>
                     Download&nbsp;.csv
                   </Button>
                 </div>
               </div>
             </div>
-            <div className={s.inputsRow}>
+            <div className={style.inputsRow}>
               <InputPair
                 label="Amount per Wallet"
-                dash={this.state.amountDash}
-                usd={this.state.amountUSD}
-                updatingUSD={this.state.updatingAmountUSD}
+                dash={amountDash}
+                usd={amountUSD}
+                updatingUSD={updatingAmountUSD}
                 onChange={this.handleAmountChange}
               />
               <InputPair
                 label="Per Transaction Fee"
-                dash={this.state.feeDash}
-                usd={this.state.feeUSD}
-                updatingUSD={this.state.updatingFeeUSD}
+                dash={feeDash}
+                usd={feeUSD}
+                updatingUSD={updatingFeeUSD}
                 onChange={this.handleTransactionChange}
               />
               <InputPair
@@ -370,11 +399,34 @@ class Generate extends React.Component {
                 disabled={true}
               />
             </div>
-            <QRCode
-              style={{ width: 256 }}
-              bgColor="#CCFFFF"
-              value={`dash:${this.state.fundingKeyPublic}?amount=${transactionTotal}`}
-            />
+            <div className={style.key_outer_container}>
+              <div className={style.qr__container}>
+                <QRCode
+                  style={{ width: 256 }}
+                  bgColor="#CCFFFF"
+                  value={`dash:${sourcePublicKey}?amount=${transactionTotal}`}
+                />
+              </div>
+              <div className={noFunds ? style.key__container__error : style.key__container}>
+                <label>Or input existing Private Key:</label>
+                {noFunds && (
+                  <span>
+                    Supply a funding source with sufficient Dash
+                  </span>
+                )}
+                <input type="text"
+                       placeholder="ex: Xyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+                       className={style.key__input}
+                       value={sourcePublicKey}
+                />
+                <div className={style.balance__container}>
+                  <label>Current Balance:</label>
+                  <span className={style.balance__amount}>0.0000 Dash</span>
+                  <span className={style.balance__amount}>0.00 USD</span>
+                  <button className={style.key__button}>Recheck Balance</button>
+                </div>
+              </div>
+            </div>
           </Fragment>
         )}
       </Card>
