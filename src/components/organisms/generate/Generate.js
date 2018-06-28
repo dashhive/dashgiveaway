@@ -8,6 +8,8 @@ import InputPair from '../input-pair/InputPair'
 import Card from '../../molecules/card/card'
 import style from './Generate.css'
 
+export const MAX_INSPECTION_BATCH = 10
+
 class Generate extends React.Component {
   state = {
     csv: null,
@@ -46,6 +48,51 @@ class Generate extends React.Component {
     }
     window.localStorage.setItem(name, JSON.stringify(address))
     return address
+  }
+
+  getWalletPublicKey = wallet => wallet.publicKey
+
+  async performInspection(addresses, baseURL) {
+    if (!addresses) {
+      return Promise.reject('No addresses provided')
+    }
+
+    try {
+      const fetchOptions = {
+        mode: 'cors',
+        method: 'POST',
+        body: JSON.stringify({
+          addrs: addresses.join(','),
+        }),
+      }
+      const walletJSON = await window.fetch(`${baseURL}/addrs/utxo`, fetchOptions)
+      return walletJSON.json()
+    } catch (e) {
+      return Promise.reject(`An error occurred while trying to inspect wallets ${addresses.join(',')}`)
+    }
+  }
+
+  async inspectWallets(wallets) {
+    const transactions = !Array.isArray(wallets) ? [[wallets.publicKey]] : wallets
+      .reduce((prev, wallet, i) => {
+        const index = i / MAX_INSPECTION_BATCH
+        if (!prev[index]) {
+          prev[index] = [wallet.publicKey]
+        } else {
+          prev[index].push(wallet.publicKey)
+        }
+        return prev
+      }, [])
+
+    return transactions.reduce(async (prev, wallets) => {
+      await prev
+      const resultsJSON = await this.performInspection(wallets)
+      const results = resultsJSON.json()
+      return [
+        ...prev,
+        results,
+      ]
+    }, [])
   }
 
   getStoredWallet(name) {
