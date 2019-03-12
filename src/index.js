@@ -1,16 +1,18 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Provider } from 'react-redux'
 import './normalize.css'
 import './index.css'
-import store from './store'
 import App from './App'
 import registerServiceWorker from './registerServiceWorker'
+import DashToUSDProvider from './store/dash-to-usd/context'
+import BrowserRouter from 'react-router-dom/es/BrowserRouter'
 
 const root = (
-  <Provider store={store}>
-    <App />
-  </Provider>
+  <DashToUSDProvider>
+    <BrowserRouter history={window.browserHistory}>
+      <App/>
+    </BrowserRouter>
+  </DashToUSDProvider>
 )
 
 ReactDOM.render(root, document.getElementById('root'))

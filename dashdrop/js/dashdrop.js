@@ -66,7 +66,7 @@
       return new bitcore.PrivateKey(sk).toAddress().toString();
     };
     DashDrop._keypairToPublicKey = function (sk) {
-      return sk.publicKey; //new bitcore.PrivateKey(sk).toAddress().toString();
+      return sk.publicKey //new Bitcore.PrivateKey(sk).toAddress().toString();
     };
     // opts = { utxo, src, dsts, amount, fee }
     DashDrop.estimateFee = function (opts) {

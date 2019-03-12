@@ -6,6 +6,8 @@
 # temporary files which can be created if a process still has a handle open of a deleted file
 .fuse_hidden*
 
+# IDE directories
+.idea/
 # KDE directory preferences
 .directory
 
@@ -125,3 +127,4 @@ Temporary Items
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+.firebaserc

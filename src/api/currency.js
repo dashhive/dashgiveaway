@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-fetch'
+import performRequest from './perform-request'
 
-export const getDashCurrency = () => {
-  return fetch('https://insight.dash.org/api/currency').then(j => j.json())
-}
+export const getDashCurrency = () => performRequest('https://insight.dash.org/api/currency')

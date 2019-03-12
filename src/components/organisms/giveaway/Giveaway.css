@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+}
+
+@media (max-width: 910px) {
+  .root {
+    padding: 0 1em;
+  }
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin: -1.2rem;
+}
+
+@media (max-width: 800px) {
+  .actions {
+    flex-direction: column;
+  }
+}

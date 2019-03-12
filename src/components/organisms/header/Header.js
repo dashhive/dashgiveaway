@@ -1,13 +1,9 @@
 import React from 'react'
-import { connect } from 'react-redux'
-import { dashToUSDSelector, getDashToUSD } from 'store/dashToUSD'
-import Button from 'atoms/Button'
+import Button from '../../atoms/button/Button'
 import s from './Header.css'
-class Header extends React.Component {
-  componentDidMount() {
-    this.props.getDashToUSD()
-  }
+import { withDashToUSD } from '../../../store/dash-to-usd/context'
 
+export class Header extends React.Component {
   render() {
     return (
       <header className={s.root}>
@@ -15,7 +11,7 @@ class Header extends React.Component {
           <div className={s.logo}>
             <img src="/img/logo.png" alt="" />
           </div>
-          <h2>1 DASH = {this.props.currency} USD</h2>
+          <h2>1 DASH = {this.props.dashToUSD} USD</h2>
           <div className={s.buttons}>
             <Button primary href="https://github.com/dashhive/dashdrop" target="_blank">
               View Code
@@ -45,8 +41,4 @@ class Header extends React.Component {
   }
 }
 
-const mapState = state => ({
-  currency: dashToUSDSelector(state),
-})
-
-export default connect(mapState, { getDashToUSD })(Header)
+export default withDashToUSD(Header)

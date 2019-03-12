@@ -1,0 +1,8 @@
+const STATUSES = {
+  REQUESTING: 'REQUESTING',
+  RECEIVED: 'RECEIVED',
+  ERROR: 'ERROR',
+  INVALID: 'INVALID',
+}
+
+export default STATUSES

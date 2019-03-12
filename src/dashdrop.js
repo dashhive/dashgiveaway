@@ -1,3 +1,45 @@
+export const bitcore = require('bitcore-lib-dash')
+export const SATOSHIS_PER_DASH = 100000000
+
+export default class Dash {
+  dashToUSD
+  quantity
+
+  constructor(dashToUSD, quantity) {
+    this.dashToUSD = dashToUSD
+    this.quantity = quantity
+  }
+
+  static toUSD(quantity) {
+
+  }
+
+  toUSD(amountDash) {
+    return Dash.fromDashToUSD(this.amountDash)
+  }
+
+
+}
+
+export class USD {
+  dashToUSD
+  quantity
+
+  constructor(dashToUSD, quantity) {
+    this.dashToUSD = dashToUSD
+    this.quantity = quantity
+  }
+
+  static toDash(dashToUSD, quantity) {
+    const dashQuantity = quantity / dashToUSD
+  }
+
+  toDash() {
+    return USD.toDash(this.dashToUSD, this.quantity)
+  }
+}
+
+
 ;(() => {
   const bitcore = require('bitcore-lib-dash')
   const SATOSHIS_PER_DASH = 100000000
@@ -58,7 +100,7 @@
     }
     DashDrop._privateToPublic = sk => new bitcore.PrivateKey(sk).toAddress().toString()
     DashDrop._keypairToPublicKey = (
-      { publicKey }, //new bitcore.PrivateKey(sk).toAddress().toString();
+      { publicKey }, //new Bitcore.PrivateKey(sk).toAddress().toString();
     ) => publicKey
     // opts = { utxo, src, dsts, amount, fee }
     DashDrop.estimateFee = opts => {
@@ -190,7 +232,7 @@
         .map(
           ({ publicKey, privateKey, amount }, i) =>
             `${i + 1},${JSON.stringify(publicKey)},${JSON.stringify(privateKey) ||
-              ''},${amount || 0}`,
+            ''},${amount || 0}`,
         )
         .join('\n')
       return csv
@@ -400,7 +442,7 @@
         window.alert(
           `Only the first ${
             config.outputsPerTransaction
-          } wallets will be filled (1000 outputs per UTXO per private key).`,
+            } wallets will be filled (1000 outputs per UTXO per private key).`,
         )
         keysets.length = 1
       }
@@ -444,24 +486,24 @@
           .fetch(restTx.url, restTx)
           .then((
             resp, // 258: txn-mempool-conflict. Code:-26
-          ) =>
-            resp.json().then(result => {
-              console.log('result:')
-              console.log(result)
-              keyset.forEach(({ publicKey, privateKey, amount }) => {
-                localStorage.setItem(
-                  `dash:${publicKey}`,
-                  JSON.stringify({
-                    privateKey: privateKey,
-                    publicKey: publicKey,
-                    amount: (amount || 0) + config.walletAmount,
-                    commited: true,
-                  }),
-                )
-              })
+            ) =>
+              resp.json().then(result => {
+                console.log('result:')
+                console.log(result)
+                keyset.forEach(({ publicKey, privateKey, amount }) => {
+                  localStorage.setItem(
+                    `dash:${publicKey}`,
+                    JSON.stringify({
+                      privateKey: privateKey,
+                      publicKey: publicKey,
+                      amount: (amount || 0) + config.walletAmount,
+                      commited: true,
+                    }),
+                  )
+                })
 
-              return result
-            }),
+                return result
+              }),
           )
           .then(
             y => y,
